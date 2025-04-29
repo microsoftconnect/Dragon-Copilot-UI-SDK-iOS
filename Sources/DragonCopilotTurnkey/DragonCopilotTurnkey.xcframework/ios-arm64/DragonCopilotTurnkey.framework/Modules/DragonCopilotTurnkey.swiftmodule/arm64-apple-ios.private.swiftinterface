@@ -1,0 +1,150 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.0.3 effective-5.10 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)
+// swift-module-flags: -target arm64-apple-ios17.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name DragonCopilotTurnkey
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface
+import AVFoundation
+import CallKit
+import Combine
+import CoreData
+import CryptoKit
+import DeveloperToolsSupport
+@_exported import DragonCopilotTurnkey
+import DragonMedicalSpeechKit
+import Foundation
+import Network
+import Security
+import Swift
+import SwiftUI
+import UIKit
+import WebKit
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+public struct RemoteRecording {
+  public var recordingID: Swift.String?
+  public var startTime: Foundation.Date
+  public var recordingDuration: Swift.Int64
+  public init()
+}
+@_hasMissingDesignatedInitializers @objc public class AppWebViewControllerWrapper : ObjectiveC.NSObject {
+  @objc public func getViewController() -> UIKit.UIViewController
+  @objc deinit
+}
+@objc public class TAppMetadata : ObjectiveC.NSObject {
+  @objc public init(appId: Swift.String? = nil, appVersion: Swift.String? = nil, deviceId: Swift.String? = nil)
+  public init(appId: Swift.String? = nil, appVersion: Swift.String? = nil, deviceId: Swift.String? = nil, internalClient: Swift.Bool = false)
+  @objc deinit
+}
+@objc public class TConfiguration : ObjectiveC.NSObject {
+  @objc public init(appMetadata: DragonCopilotTurnkey.TAppMetadata, serverDetails: DragonCopilotTurnkey.TServerDetails, partnerId: Swift.String? = nil, customerId: Swift.String? = nil, ehrInstanceId: Swift.String? = nil, productId: Swift.String? = nil)
+  @objc deinit
+}
+@_inheritsConvenienceInitializers @objc final public class TConstants : ObjectiveC.NSObject {
+  public static let defaultGeography: Swift.String
+  public static let defaultCloudInstance: Swift.String
+  public static let defaultEnvironment: Swift.String
+  public static let defaultReportingLocale: Swift.String
+  public static let defaultUXLocale: Swift.String
+  public static let defaultRecordingLocale: Swift.String
+  public static let unavailable: Swift.String
+  @objc override dynamic public init()
+  @objc deinit
+}
+@objc public class TPatient : ObjectiveC.NSObject {
+  @objc public init(id: Swift.String? = nil, fhirId: Swift.String? = nil, firstName: Swift.String? = nil, lastName: Swift.String? = nil, middleName: Swift.String? = nil, gender: Swift.String? = nil, birthDate: Foundation.Date? = nil, medicalRecordNumber: Swift.String? = nil)
+  @objc deinit
+}
+@objc public class TServerDetails : ObjectiveC.NSObject {
+  @objc public init(environment: Swift.String? = TConstants.defaultEnvironment, geography: Swift.String? = nil, cloudInstance: Swift.String? = nil)
+  @objc deinit
+}
+@objc public class TUser : ObjectiveC.NSObject {
+  @objc public init(id: Swift.String? = nil, fhirId: Swift.String? = nil, firstName: Swift.String? = nil, middleName: Swift.String? = nil, lastName: Swift.String? = nil, ehrUserId: Swift.String? = nil)
+  @objc deinit
+}
+@objc public class TVisit : ObjectiveC.NSObject {
+  @objc public init(id: Swift.String? = nil, fhirId: Swift.String? = nil, correlationId: Swift.String? = nil, metadata: Swift.String? = nil, reasonForVisit: Swift.String? = nil)
+  @objc deinit
+}
+@objc public class TTokenResponse : ObjectiveC.NSObject {
+  @objc final public let token: Swift.String
+  @objc public init(token: Swift.String)
+  @objc deinit
+}
+@objc public class TEntraTokenResponse : DragonCopilotTurnkey.TTokenResponse {
+  @objc final public let expiresAt: Foundation.Date
+  @objc public init(token: Swift.String, expiresAt: Foundation.Date)
+  @objc deinit
+}
+@objc public class TSoFTokenResponse : ObjectiveC.NSObject {
+  @objc final public let token: Swift.String?
+  @objc final public let issuer: Swift.String
+  @objc final public let launch: Swift.String
+  @objc public init(token: Swift.String?, issuer: Swift.String, launch: Swift.String)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @objc public class TAuthResponse : ObjectiveC.NSObject {
+  @objc final public let tokenResponse: DragonCopilotTurnkey.TTokenResponse?
+  @objc final public let entraTokenResponse: DragonCopilotTurnkey.TEntraTokenResponse?
+  @objc final public let sofTokenResponse: DragonCopilotTurnkey.TSoFTokenResponse?
+  @objc convenience public init(tokenResponse: DragonCopilotTurnkey.TTokenResponse)
+  @objc convenience public init(entraTokenResponse: DragonCopilotTurnkey.TEntraTokenResponse)
+  @objc convenience public init(sofTokenResponse: DragonCopilotTurnkey.TSoFTokenResponse)
+  @objc deinit
+}
+@objc public protocol TAccessTokenProvider {
+  @objc func accessToken(scopes: [Swift.String]?, forceRefresh: Swift.Bool, onSuccess: @escaping (DragonCopilotTurnkey.TAuthResponse) -> Swift.Void, onFailure: @escaping (any Swift.Error) -> Swift.Void)
+}
+extension DragonCopilotTurnkey.TAccessTokenProvider {
+  public func accessTokenAsync(scopes: [Swift.String]? = nil, forceRefresh: Swift.Bool = false) async throws -> DragonCopilotTurnkey.TAuthResponse
+}
+extension DragonCopilotTurnkey.TurnkeyFramework {
+  public static var version: Swift.String {
+    get
+  }
+}
+@objc public enum LogoutReason : Swift.Int {
+  case user
+  case inactivity
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public protocol TurnKeyDelegate {
+  @objc optional func isTurnKeyWebViewLoaded(_ isLoadingDone: Swift.Bool)
+  @objc optional func logout(with logoutType: DragonCopilotTurnkey.LogoutReason)
+  @objc optional func appearanceThemeChanged(to uiTheme: Swift.String)
+}
+@objc public protocol TRecordingDelegate {
+  @objc optional func recordingStarted()
+  @objc optional func recordingFailed()
+  @objc optional func recordingStopped()
+}
+@objc public protocol TDictationDelegate {
+  @objc optional func dictationStarted()
+  @objc optional func dictationStopped()
+}
+@objc public protocol TConfigurationProvider {
+  @objc func getTConfiguration() -> DragonCopilotTurnkey.TConfiguration
+  @objc func getTAccessTokenProvider() -> any DragonCopilotTurnkey.TAccessTokenProvider
+  @objc func getTUser() -> DragonCopilotTurnkey.TUser
+}
+@objc public protocol TSessionDataProvider {
+  @objc func getTPatient() -> DragonCopilotTurnkey.TPatient
+  @objc func getTVisit() -> DragonCopilotTurnkey.TVisit
+}
+@_hasMissingDesignatedInitializers @objc public class TurnkeyFramework : ObjectiveC.NSObject {
+  @objc public static func initialize(dataProvider: any DragonCopilotTurnkey.TConfigurationProvider, delegate: (any DragonCopilotTurnkey.TurnKeyDelegate)? = nil, recordingDelegate: (any DragonCopilotTurnkey.TRecordingDelegate)? = nil, dictationDelegate: (any DragonCopilotTurnkey.TDictationDelegate)? = nil) -> DragonCopilotTurnkey.TurnkeyFramework
+  @objc public static func dispose()
+  public func openSession(sessionDataProvider: any DragonCopilotTurnkey.TSessionDataProvider) -> some SwiftUICore.View
+  
+  @objc public func openSessionController(sessionDataProvider: any DragonCopilotTurnkey.TSessionDataProvider) -> UIKit.UIViewController
+  @objc public func closeSession()
+  @objc public func disableLogging()
+  @objc deinit
+}
+extension DragonCopilotTurnkey.LogoutReason : Swift.Equatable {}
+extension DragonCopilotTurnkey.LogoutReason : Swift.Hashable {}
+extension DragonCopilotTurnkey.LogoutReason : Swift.RawRepresentable {}
