@@ -1,0 +1,11 @@
+framework module DragonCopilotTurnkey {
+  umbrella header "DragonCopilotTurnkey.h"
+  export *
+
+  module * { export * }
+}
+
+module DragonCopilotTurnkey.Swift {
+  header "DragonCopilotTurnkey-Swift.h"
+  requires objc
+}

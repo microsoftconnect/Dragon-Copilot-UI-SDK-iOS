@@ -1,0 +1,102 @@
+{
+    "common" : {
+        "TurnkeyPlatformGuid": "02ba1d35-aab9-4e70-89d7-4fac00661222",
+        "ProductGuid": "4f939ade-287a-416d-8484-1e64013039dd",
+        "StreamingAudience":"https://streaming.daxcopilot.com",
+        "EISTokenFetchUrlSuffix" : "api/token/generate",
+        "EISTokenLaunchUrlSuffix" : "app/epic/launch",
+        "ExternalLogingUrlSuffix" : "logs/batch",
+        "EnableAppInsightsLogging": "true",
+        "EnableExternalLogging": "true"
+    },
+    "local" : {
+        "ServerEnvironment": "qa",
+        "SubServerEnvironment" : "internal",
+        "UseLocalConfiguredUrls": "true",
+        "EhrIntegrationServiceUrl": "https://ehr-internal.qa.ppe-copilot.dragon.com",
+        "ConfigServiceUrl": "https://apim.qa.ppe-copilot.us.dragon.com/configservice/api/v1",
+        "WebviewUrl": "http://localhost:8088/unibox/drc",
+        "AppInsightsUrl": "InstrumentationKey=c6101377-40e2-4000-8ace-42b8f84c4aa6;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/",
+        "LoggingServiceUrl" : "https://apim.qa.ppe-copilot.us.dragon.com/loggingservice/api/v1",
+        "DmsUrl" : "https://sas1-qaq3.nuancehce.com",
+        "StreamingScope" : "api://streaming.daxcopilot.com/Data.Write",
+        "ConfigServiceScope" : "api://80b55230-7142-4482-b652-d533155f85f1/ConfigService.Access",
+        "LoggingServiceScope" : "api://e7d08001-28c5-4b4e-b0f0-3df9c7077258/LoggingService.Access",
+        "DefaultAppScope" : "api://nhlsdev.dragonpreview.qa/AppAccess"
+    },
+    "lab" : {
+        "ServerEnvironment": "development",
+        "StreamingScope" : "api://streaming.daxcopilot.com/Data.Write",
+        "ConfigServiceScope" : "api://6f0fac0d-7b56-4df5-a8e4-ed862944c0d9/ConfigService.Access",
+        "LoggingServiceScope" : "api://bd8aed44-e3c8-41ba-b703-2574d3bac83e/LoggingService.Access",
+        "DefaultAppScope" : "api://Unibox.Dev/AppAccess"
+    },
+    "development" : {
+        "ServerEnvironment": "development",
+        "StreamingScope" : "api://streaming.daxcopilot.com/Data.Write",
+        "ConfigServiceScope" : "api://6f0fac0d-7b56-4df5-a8e4-ed862944c0d9/ConfigService.Access",
+        "LoggingServiceScope" : "api://bd8aed44-e3c8-41ba-b703-2574d3bac83e/LoggingService.Access",
+        "DefaultAppScope" : "api://Unibox.Dev/AppAccess"
+    },
+    "qa" : {
+        "ServerEnvironment": "qa",
+        "StreamingScope" : "api://streaming.daxcopilot.com/Data.Write",
+        "ConfigServiceScope" : "api://80b55230-7142-4482-b652-d533155f85f1/ConfigService.Access",
+        "LoggingServiceScope" : "api://e7d08001-28c5-4b4e-b0f0-3df9c7077258/LoggingService.Access",
+        "DefaultAppScope" : "api://nhlsdev.dragonpreview.qa/AppAccess",
+        "UseLocalConfiguredUrls" :"false",
+        "EhrIntegrationServiceUrl": "https://ehr-internal.qa.ppe-copilot.dragon.com",
+        "ConfigServiceUrl": "https://apim.qa.ppe-copilot.us.dragon.com/configservice/api/v1",
+        "WebviewUrl": "https://www-internal.qa.ppe-copilot.dragon.com/unibox/drc",
+        "LoggingServiceUrl" : "https://apimgmt.qa.ppe-copilot.dragon.com/loggingservice/api/v1",
+        "DmsUrl" : "https://sas1-qaq3.nuancehce.com"
+    },
+    "qa_internal" : {
+        "ServerEnvironment": "qa",
+        "SubServerEnvironment" : "internal",
+        "StreamingScope" : "api://streaming.daxcopilot.com/Data.Write",
+        "ConfigServiceScope" : "api://80b55230-7142-4482-b652-d533155f85f1/ConfigService.Access",
+        "LoggingServiceScope" : "api://e7d08001-28c5-4b4e-b0f0-3df9c7077258/LoggingService.Access",
+        "DefaultAppScope" : "api://nhlsdev.dragonpreview.qa/AppAccess",
+        "UseLocalConfiguredUrls": "false",
+        "EhrIntegrationServiceUrl": "https://ehr-internal.qa.ppe-copilot.dragon.com",
+        "ConfigServiceUrl": "https://apim.qa.ppe-copilot.us.dragon.com/configservice/api/v1",
+        "WebviewUrl": "https://www-internal.qa.ppe-copilot.dragon.com/unibox/drc",
+        "LoggingServiceUrl" : "https://apimgmt.qa.ppe-copilot.dragon.com/loggingservice/api/v1",
+        "DmsUrl" : "https://sas1-qaq3.nuancehce.com"
+    },
+    "qa_1p" : {
+        "ServerEnvironment": "qa",
+        "SubServerEnvironment" : "1p",
+        "StreamingScope" : "api://streaming.daxcopilot.com/Data.Write",
+        "ConfigServiceScope" : "api://80b55230-7142-4482-b652-d533155f85f1/ConfigService.Access",
+        "LoggingServiceScope" : "api://e7d08001-28c5-4b4e-b0f0-3df9c7077258/LoggingService.Access",
+        "DefaultAppScope" : "api://nhlsdev.dragonpreview.qa/AppAccess",
+        "UseLocalConfiguredUrls": "false",
+        "EhrIntegrationServiceUrl": "https://ehr-internal.qa.ppe-copilot.dragon.com",
+        "ConfigServiceUrl": "https://apim.qa.ppe-copilot.us.dragon.com/configservice/api/v1",
+        "LoggingServiceUrl" : "https://apim.qa.ppe-copilot.us.dragon.com/loggingservice/api/v1",
+        "WebviewUrl": "https://test.us.ppe-orion.dragon.com/unibox/drc",
+        "DmsUrl" : "https://sas3-qaq3.nuancehce.com"
+    },
+    "staging" : {
+        "ServerEnvironment": "staging",
+        "StreamingScope" : "40d36082-d340-492f-a5af-e42ef68f4b2b/.default",
+        "ConfigServiceScope" : "40d36082-d340-492f-a5af-e42ef68f4b2b/.default",
+        "LoggingServiceScope" : "40d36082-d340-492f-a5af-e42ef68f4b2b/.default",
+        "DefaultAppScope" : "40d36082-d340-492f-a5af-e42ef68f4b2b/.default",
+        "UseLocalConfiguredUrls": "false",
+        "EhrIntegrationServiceUrl": "https://ehr-integration.stg.ppe-copilot.dragon.com",
+        "ConfigServiceUrl": "https://apim.stg.copilot.us.dragon.com/configservice/api/v1",
+        "WebviewUrl": "https://www.stg.copilot.us.dragon.com/unibox/drc",
+        "LoggingServiceUrl" : "https://apim.stg.ppe-copilot.us.dragon.com/loggingservice/api/v1/",
+        "DmsUrl" : "https://sas-staging.nuancehce.com"
+    },
+    "production" : {
+        "ServerEnvironment": "production",
+        "StreamingScope" : "40d36082-d340-492f-a5af-e42ef68f4b2b/.default",
+        "ConfigServiceScope" : "40d36082-d340-492f-a5af-e42ef68f4b2b/.default",
+        "LoggingServiceScope" : "40d36082-d340-492f-a5af-e42ef68f4b2b/.default",
+        "DefaultAppScope" : "40d36082-d340-492f-a5af-e42ef68f4b2b/.default"
+    }
+}
