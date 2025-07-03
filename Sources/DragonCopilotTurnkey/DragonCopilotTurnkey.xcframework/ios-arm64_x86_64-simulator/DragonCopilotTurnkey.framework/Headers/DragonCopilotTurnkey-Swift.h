@@ -314,13 +314,40 @@ SWIFT_CLASS("_TtC20DragonCopilotTurnkey27AppWebViewControllerWrapper")
 
 
 
+/// Represents the reason for user logout from the TurnKey framework
 typedef SWIFT_ENUM(NSInteger, LogoutReason, open) {
+/// User initiated logout
   LogoutReasonUser = 0,
+/// Logout due to inactivity timeout
   LogoutReasonInactivity = 1,
 };
 
 
 
+
+/// Represents the different reasons why a recording might be stopped
+typedef SWIFT_ENUM(NSInteger, RecordingInterruptionReason, open) {
+/// Recording automatically stopped due to a system error
+  RecordingInterruptionReasonSystemError = 0,
+/// Recording automatically stopped due to audio interruption (e.g., phone call)
+  RecordingInterruptionReasonAudioInterruption = 1,
+/// Recording automatically stopped because maximum duration was reached
+  RecordingInterruptionReasonReachedMaxDuration = 2,
+/// Recording automatically stopped due to incompatible input device
+  RecordingInterruptionReasonIncompatibleInputDevice = 3,
+/// Recording automatically stopped due to audio route change
+  RecordingInterruptionReasonAudioRouteChanged = 4,
+};
+
+/// Represents different notifications and warnings during recording
+typedef SWIFT_ENUM(NSInteger, RecordingNotification, open) {
+/// Warning because warning duration was reached
+  RecordingNotificationReachedWarnDuration = 0,
+/// Notification due to audio loss
+  RecordingNotificationAudioLoss = 1,
+/// Notification because external microphone was detected
+  RecordingNotificationExternalMicDetected = 2,
+};
 
 @class NSString;
 @class TAuthResponse;
@@ -380,17 +407,30 @@ SWIFT_CLASS("_TtC20DragonCopilotTurnkey13TAuthResponse")
 SWIFT_CLASS("_TtC20DragonCopilotTurnkey14TConfiguration")
 @interface TConfiguration : NSObject
 /// Initializes a new instance of `TConfiguration
-- (nonnull instancetype)initWithAppMetadata:(TAppMetadata * _Nonnull)appMetadata serverDetails:(TServerDetails * _Nonnull)serverDetails partnerId:(NSString * _Nullable)partnerId customerId:(NSString * _Nullable)customerId ehrInstanceId:(NSString * _Nullable)ehrInstanceId productId:(NSString * _Nullable)productId OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithAppMetadata:(TAppMetadata * _Nonnull)appMetadata serverDetails:(TServerDetails * _Nonnull)serverDetails partnerId:(NSString * _Nullable)partnerId customerId:(NSString * _Nullable)customerId ehrInstanceId:(NSString * _Nullable)ehrInstanceId productId:(NSString * _Nullable)productId traceId:(NSString * _Nullable)traceId OBJC_DESIGNATED_INITIALIZER;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
 
 @class TUser;
 
+/// Protocol for providing configuration data to the TurnKey framework
 SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey22TConfigurationProvider_")
 @protocol TConfigurationProvider
+/// Returns the configuration for the TurnKey framework
+///
+/// returns:
+/// The configuration object
 - (TConfiguration * _Nonnull)getTConfiguration SWIFT_WARN_UNUSED_RESULT;
+/// Returns the access token provider for authentication
+///
+/// returns:
+/// The access token provider
 - (id <TAccessTokenProvider> _Nonnull)getTAccessTokenProvider SWIFT_WARN_UNUSED_RESULT;
+/// Returns the user information
+///
+/// returns:
+/// The user object
 - (TUser * _Nonnull)getTUser SWIFT_WARN_UNUSED_RESULT;
 @end
 
@@ -402,11 +442,28 @@ SWIFT_CLASS("_TtC20DragonCopilotTurnkey10TConstants")
 @end
 
 
-/// Protocol defining  events for the TurnKey speechKit that clients can get notified
+/// Protocol defining events for the TurnKey framework that clients can implement
+SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey9TDelegate_")
+@protocol TDelegate
+@optional
+/// Called when the WebView finishes loading
+/// \param isLoadingDone Indicates whether the web view has finished loading
+///
+- (void)isTurnKeyWebViewLoaded:(BOOL)isLoadingDone;
+/// Notifies when a logout occurs
+/// \param logoutType The reason for the logout (user initiated or inactivity)
+///
+- (void)logoutWith:(enum LogoutReason)logoutType;
+@end
+
+
+/// Protocol defining dictation-related events that clients can implement
 SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey18TDictationDelegate_")
 @protocol TDictationDelegate
 @optional
+/// Called when dictation starts
 - (void)dictationStarted;
+/// Called when dictation stops
 - (void)dictationStopped;
 @end
 
@@ -447,13 +504,24 @@ SWIFT_CLASS("_TtC20DragonCopilotTurnkey8TPatient")
 @end
 
 
-/// Protocol defining  events for the TurnKey Daxkit that clients can get notified
+/// Protocol defining recording-related events that clients can implement
 SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey18TRecordingDelegate_")
 @protocol TRecordingDelegate
 @optional
+/// Called when recording starts successfully
 - (void)recordingStarted;
+/// Called when recording fails to start
 - (void)recordingFailed;
+/// Called when recording stops
 - (void)recordingStopped;
+/// Called when recording is interrupted and automatically stopped
+/// \param reason The reason why recording was automatically stopped
+///
+- (void)recordingInterruptedWithReason:(enum RecordingInterruptionReason)reason;
+/// Called when a notification or warning occurs during recording
+/// \param notification The type of notification or warning
+///
+- (void)recordingNotificationWithNotification:(enum RecordingNotification)notification;
 @end
 
 
@@ -467,10 +535,38 @@ SWIFT_CLASS("_TtC20DragonCopilotTurnkey14TServerDetails")
 
 @class TVisit;
 
+/// Protocol for providing session data to the TurnKey framework
 SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey20TSessionDataProvider_")
 @protocol TSessionDataProvider
+/// Returns the patient information for the current session
+///
+/// returns:
+/// The patient object
 - (TPatient * _Nonnull)getTPatient SWIFT_WARN_UNUSED_RESULT;
+/// Returns the visit information for the current session
+///
+/// returns:
+/// The visit object
 - (TVisit * _Nonnull)getTVisit SWIFT_WARN_UNUSED_RESULT;
+@end
+
+
+/// Protocol defining settings-related events that clients can implement
+SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey17TSettingsDelegate_")
+@protocol TSettingsDelegate
+@optional
+/// Called when the screen-on-while-recording setting changes
+/// \param screenOn Indicates whether the screen should stay on while recording
+///
+- (void)isIdleTimerDisabledWithIsOn:(BOOL)screenOn;
+/// Called when the appearance theme changes
+/// \param uiTheme The new theme identifier
+///
+- (void)appearanceThemeChangedTo:(NSString * _Nonnull)uiTheme;
+/// Called when the application language needs to be changed
+/// \param languageCode Indicates configured UI or Application Locale value. Example: “en-US”, “es-US”
+///
+- (void)changeApplicationLanguageTo:(NSString * _Nonnull)languageCode;
 @end
 
 
@@ -513,52 +609,15 @@ SWIFT_CLASS("_TtC20DragonCopilotTurnkey6TVisit")
 @end
 
 
-/// Protocol defining  events for the TurnKey framework that clients can implement
-SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey15TurnKeyDelegate_")
-@protocol TurnKeyDelegate
-@optional
-/// Called when the WebView finishes loading
-/// \param isLoadingDone isLoadingDone gives us status of web view
-///
-- (void)isTurnKeyWebViewLoaded:(BOOL)isLoadingDone;
-- (void)logoutWith:(enum LogoutReason)logoutType;
-- (void)appearanceThemeChangedTo:(NSString * _Nonnull)uiTheme;
-@end
-
-
 SWIFT_CLASS("_TtC20DragonCopilotTurnkey16TurnkeyFramework")
 @interface TurnkeyFramework : NSObject
-/// Initializes the TurnKey framework with the provided configuration provider and optional delegates.
-/// \param dataProvider The configuration provider that supplies necessary configuration for the framework
-///
-/// \param delegate Optional delegate to receive framework lifecycle events
-///
-/// \param recordingDelegate Optional delegate to receive recording events
-///
-/// \param dictationDelegate Optional delegate to receive dictation events
-///
-///
-/// returns:
-/// An instance of TurnkeyFramework
-+ (TurnkeyFramework * _Nonnull)initializeWithDataProvider:(id <TConfigurationProvider> _Nonnull)dataProvider delegate:(id <TurnKeyDelegate> _Nullable)delegate recordingDelegate:(id <TRecordingDelegate> _Nullable)recordingDelegate dictationDelegate:(id <TDictationDelegate> _Nullable)dictationDelegate SWIFT_WARN_UNUSED_RESULT;
-/// Disposes of all TurnKey resources and cleans up the framework.
-/// This should be called when the framework is no longer needed.
++ (TurnkeyFramework * _Nonnull)initializeWithDataProvider:(id <TConfigurationProvider> _Nonnull)dataProvider delegate:(id <TDelegate> _Nullable)delegate recordingDelegate:(id <TRecordingDelegate> _Nullable)recordingDelegate dictationDelegate:(id <TDictationDelegate> _Nullable)dictationDelegate settingsDelegate:(id <TSettingsDelegate> _Nullable)settingsDelegate SWIFT_WARN_UNUSED_RESULT;
 + (void)dispose;
-/// Opens a new session and returns a UIKit view controller for the session.
-/// \param sessionDataProvider The provider that supplies session-specific data
-///
-///
-/// returns:
-/// A UIKit view controller that can be presented in your app
 - (UIViewController * _Nonnull)openSessionControllerWithSessionDataProvider:(id <TSessionDataProvider> _Nonnull)sessionDataProvider SWIFT_WARN_UNUSED_RESULT;
-/// only 3P
-/// Closes the current session and cleans up session-specific resources.
-/// This should be called when a session is complete.
 - (void)closeSession;
-/// only 3P
-/// Disables all logging in the TurnKey framework.
-/// This should be called if you want to disable logging for privacy or performance reasons.
 - (void)disableLogging;
+- (void)developerModeWithIsON:(BOOL)isON;
++ (BOOL)isDeveloperModeOn SWIFT_WARN_UNUSED_RESULT;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
@@ -895,13 +954,40 @@ SWIFT_CLASS("_TtC20DragonCopilotTurnkey27AppWebViewControllerWrapper")
 
 
 
+/// Represents the reason for user logout from the TurnKey framework
 typedef SWIFT_ENUM(NSInteger, LogoutReason, open) {
+/// User initiated logout
   LogoutReasonUser = 0,
+/// Logout due to inactivity timeout
   LogoutReasonInactivity = 1,
 };
 
 
 
+
+/// Represents the different reasons why a recording might be stopped
+typedef SWIFT_ENUM(NSInteger, RecordingInterruptionReason, open) {
+/// Recording automatically stopped due to a system error
+  RecordingInterruptionReasonSystemError = 0,
+/// Recording automatically stopped due to audio interruption (e.g., phone call)
+  RecordingInterruptionReasonAudioInterruption = 1,
+/// Recording automatically stopped because maximum duration was reached
+  RecordingInterruptionReasonReachedMaxDuration = 2,
+/// Recording automatically stopped due to incompatible input device
+  RecordingInterruptionReasonIncompatibleInputDevice = 3,
+/// Recording automatically stopped due to audio route change
+  RecordingInterruptionReasonAudioRouteChanged = 4,
+};
+
+/// Represents different notifications and warnings during recording
+typedef SWIFT_ENUM(NSInteger, RecordingNotification, open) {
+/// Warning because warning duration was reached
+  RecordingNotificationReachedWarnDuration = 0,
+/// Notification due to audio loss
+  RecordingNotificationAudioLoss = 1,
+/// Notification because external microphone was detected
+  RecordingNotificationExternalMicDetected = 2,
+};
 
 @class NSString;
 @class TAuthResponse;
@@ -961,17 +1047,30 @@ SWIFT_CLASS("_TtC20DragonCopilotTurnkey13TAuthResponse")
 SWIFT_CLASS("_TtC20DragonCopilotTurnkey14TConfiguration")
 @interface TConfiguration : NSObject
 /// Initializes a new instance of `TConfiguration
-- (nonnull instancetype)initWithAppMetadata:(TAppMetadata * _Nonnull)appMetadata serverDetails:(TServerDetails * _Nonnull)serverDetails partnerId:(NSString * _Nullable)partnerId customerId:(NSString * _Nullable)customerId ehrInstanceId:(NSString * _Nullable)ehrInstanceId productId:(NSString * _Nullable)productId OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithAppMetadata:(TAppMetadata * _Nonnull)appMetadata serverDetails:(TServerDetails * _Nonnull)serverDetails partnerId:(NSString * _Nullable)partnerId customerId:(NSString * _Nullable)customerId ehrInstanceId:(NSString * _Nullable)ehrInstanceId productId:(NSString * _Nullable)productId traceId:(NSString * _Nullable)traceId OBJC_DESIGNATED_INITIALIZER;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
 
 @class TUser;
 
+/// Protocol for providing configuration data to the TurnKey framework
 SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey22TConfigurationProvider_")
 @protocol TConfigurationProvider
+/// Returns the configuration for the TurnKey framework
+///
+/// returns:
+/// The configuration object
 - (TConfiguration * _Nonnull)getTConfiguration SWIFT_WARN_UNUSED_RESULT;
+/// Returns the access token provider for authentication
+///
+/// returns:
+/// The access token provider
 - (id <TAccessTokenProvider> _Nonnull)getTAccessTokenProvider SWIFT_WARN_UNUSED_RESULT;
+/// Returns the user information
+///
+/// returns:
+/// The user object
 - (TUser * _Nonnull)getTUser SWIFT_WARN_UNUSED_RESULT;
 @end
 
@@ -983,11 +1082,28 @@ SWIFT_CLASS("_TtC20DragonCopilotTurnkey10TConstants")
 @end
 
 
-/// Protocol defining  events for the TurnKey speechKit that clients can get notified
+/// Protocol defining events for the TurnKey framework that clients can implement
+SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey9TDelegate_")
+@protocol TDelegate
+@optional
+/// Called when the WebView finishes loading
+/// \param isLoadingDone Indicates whether the web view has finished loading
+///
+- (void)isTurnKeyWebViewLoaded:(BOOL)isLoadingDone;
+/// Notifies when a logout occurs
+/// \param logoutType The reason for the logout (user initiated or inactivity)
+///
+- (void)logoutWith:(enum LogoutReason)logoutType;
+@end
+
+
+/// Protocol defining dictation-related events that clients can implement
 SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey18TDictationDelegate_")
 @protocol TDictationDelegate
 @optional
+/// Called when dictation starts
 - (void)dictationStarted;
+/// Called when dictation stops
 - (void)dictationStopped;
 @end
 
@@ -1028,13 +1144,24 @@ SWIFT_CLASS("_TtC20DragonCopilotTurnkey8TPatient")
 @end
 
 
-/// Protocol defining  events for the TurnKey Daxkit that clients can get notified
+/// Protocol defining recording-related events that clients can implement
 SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey18TRecordingDelegate_")
 @protocol TRecordingDelegate
 @optional
+/// Called when recording starts successfully
 - (void)recordingStarted;
+/// Called when recording fails to start
 - (void)recordingFailed;
+/// Called when recording stops
 - (void)recordingStopped;
+/// Called when recording is interrupted and automatically stopped
+/// \param reason The reason why recording was automatically stopped
+///
+- (void)recordingInterruptedWithReason:(enum RecordingInterruptionReason)reason;
+/// Called when a notification or warning occurs during recording
+/// \param notification The type of notification or warning
+///
+- (void)recordingNotificationWithNotification:(enum RecordingNotification)notification;
 @end
 
 
@@ -1048,10 +1175,38 @@ SWIFT_CLASS("_TtC20DragonCopilotTurnkey14TServerDetails")
 
 @class TVisit;
 
+/// Protocol for providing session data to the TurnKey framework
 SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey20TSessionDataProvider_")
 @protocol TSessionDataProvider
+/// Returns the patient information for the current session
+///
+/// returns:
+/// The patient object
 - (TPatient * _Nonnull)getTPatient SWIFT_WARN_UNUSED_RESULT;
+/// Returns the visit information for the current session
+///
+/// returns:
+/// The visit object
 - (TVisit * _Nonnull)getTVisit SWIFT_WARN_UNUSED_RESULT;
+@end
+
+
+/// Protocol defining settings-related events that clients can implement
+SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey17TSettingsDelegate_")
+@protocol TSettingsDelegate
+@optional
+/// Called when the screen-on-while-recording setting changes
+/// \param screenOn Indicates whether the screen should stay on while recording
+///
+- (void)isIdleTimerDisabledWithIsOn:(BOOL)screenOn;
+/// Called when the appearance theme changes
+/// \param uiTheme The new theme identifier
+///
+- (void)appearanceThemeChangedTo:(NSString * _Nonnull)uiTheme;
+/// Called when the application language needs to be changed
+/// \param languageCode Indicates configured UI or Application Locale value. Example: “en-US”, “es-US”
+///
+- (void)changeApplicationLanguageTo:(NSString * _Nonnull)languageCode;
 @end
 
 
@@ -1094,52 +1249,15 @@ SWIFT_CLASS("_TtC20DragonCopilotTurnkey6TVisit")
 @end
 
 
-/// Protocol defining  events for the TurnKey framework that clients can implement
-SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey15TurnKeyDelegate_")
-@protocol TurnKeyDelegate
-@optional
-/// Called when the WebView finishes loading
-/// \param isLoadingDone isLoadingDone gives us status of web view
-///
-- (void)isTurnKeyWebViewLoaded:(BOOL)isLoadingDone;
-- (void)logoutWith:(enum LogoutReason)logoutType;
-- (void)appearanceThemeChangedTo:(NSString * _Nonnull)uiTheme;
-@end
-
-
 SWIFT_CLASS("_TtC20DragonCopilotTurnkey16TurnkeyFramework")
 @interface TurnkeyFramework : NSObject
-/// Initializes the TurnKey framework with the provided configuration provider and optional delegates.
-/// \param dataProvider The configuration provider that supplies necessary configuration for the framework
-///
-/// \param delegate Optional delegate to receive framework lifecycle events
-///
-/// \param recordingDelegate Optional delegate to receive recording events
-///
-/// \param dictationDelegate Optional delegate to receive dictation events
-///
-///
-/// returns:
-/// An instance of TurnkeyFramework
-+ (TurnkeyFramework * _Nonnull)initializeWithDataProvider:(id <TConfigurationProvider> _Nonnull)dataProvider delegate:(id <TurnKeyDelegate> _Nullable)delegate recordingDelegate:(id <TRecordingDelegate> _Nullable)recordingDelegate dictationDelegate:(id <TDictationDelegate> _Nullable)dictationDelegate SWIFT_WARN_UNUSED_RESULT;
-/// Disposes of all TurnKey resources and cleans up the framework.
-/// This should be called when the framework is no longer needed.
++ (TurnkeyFramework * _Nonnull)initializeWithDataProvider:(id <TConfigurationProvider> _Nonnull)dataProvider delegate:(id <TDelegate> _Nullable)delegate recordingDelegate:(id <TRecordingDelegate> _Nullable)recordingDelegate dictationDelegate:(id <TDictationDelegate> _Nullable)dictationDelegate settingsDelegate:(id <TSettingsDelegate> _Nullable)settingsDelegate SWIFT_WARN_UNUSED_RESULT;
 + (void)dispose;
-/// Opens a new session and returns a UIKit view controller for the session.
-/// \param sessionDataProvider The provider that supplies session-specific data
-///
-///
-/// returns:
-/// A UIKit view controller that can be presented in your app
 - (UIViewController * _Nonnull)openSessionControllerWithSessionDataProvider:(id <TSessionDataProvider> _Nonnull)sessionDataProvider SWIFT_WARN_UNUSED_RESULT;
-/// only 3P
-/// Closes the current session and cleans up session-specific resources.
-/// This should be called when a session is complete.
 - (void)closeSession;
-/// only 3P
-/// Disables all logging in the TurnKey framework.
-/// This should be called if you want to disable logging for privacy or performance reasons.
 - (void)disableLogging;
+- (void)developerModeWithIsON:(BOOL)isON;
++ (BOOL)isDeveloperModeOn SWIFT_WARN_UNUSED_RESULT;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end

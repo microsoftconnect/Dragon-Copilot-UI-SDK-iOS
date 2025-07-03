@@ -9,7 +9,6 @@ import CoreData
 import CryptoKit
 import DeveloperToolsSupport
 @_exported import DragonCopilotTurnkey
-import DragonMedicalSpeechKit
 import Foundation
 import Network
 import Security
@@ -20,6 +19,7 @@ import WebKit
 import _Concurrency
 import _StringProcessing
 import _SwiftConcurrencyShims
+import os
 public struct RemoteRecording {
   public var recordingID: Swift.String?
   public var startTime: Foundation.Date
@@ -36,7 +36,7 @@ public struct RemoteRecording {
   @objc deinit
 }
 @objc public class TConfiguration : ObjectiveC.NSObject {
-  @objc public init(appMetadata: DragonCopilotTurnkey.TAppMetadata, serverDetails: DragonCopilotTurnkey.TServerDetails, partnerId: Swift.String? = nil, customerId: Swift.String? = nil, ehrInstanceId: Swift.String? = nil, productId: Swift.String? = nil)
+  @objc public init(appMetadata: DragonCopilotTurnkey.TAppMetadata, serverDetails: DragonCopilotTurnkey.TServerDetails, partnerId: Swift.String? = nil, customerId: Swift.String? = nil, ehrInstanceId: Swift.String? = nil, productId: Swift.String? = nil, traceId: Swift.String? = nil)
   @objc deinit
 }
 @_inheritsConvenienceInitializers @objc final public class TConstants : ObjectiveC.NSObject {
@@ -98,10 +98,14 @@ public struct RemoteRecording {
 extension DragonCopilotTurnkey.TAccessTokenProvider {
   public func accessTokenAsync(scopes: [Swift.String]? = nil, forceRefresh: Swift.Bool = false) async throws -> DragonCopilotTurnkey.TAuthResponse
 }
-extension DragonCopilotTurnkey.TurnkeyFramework {
-  public static var version: Swift.String {
-    get
-  }
+@objc public protocol TConfigurationProvider {
+  @objc func getTConfiguration() -> DragonCopilotTurnkey.TConfiguration
+  @objc func getTAccessTokenProvider() -> any DragonCopilotTurnkey.TAccessTokenProvider
+  @objc func getTUser() -> DragonCopilotTurnkey.TUser
+}
+@objc public protocol TDelegate {
+  @objc optional func isTurnKeyWebViewLoaded(_ isLoadingDone: Swift.Bool)
+  @objc optional func logout(with logoutType: DragonCopilotTurnkey.LogoutReason)
 }
 @objc public enum LogoutReason : Swift.Int {
   case user
@@ -112,39 +116,71 @@ extension DragonCopilotTurnkey.TurnkeyFramework {
     get
   }
 }
-@objc public protocol TurnKeyDelegate {
-  @objc optional func isTurnKeyWebViewLoaded(_ isLoadingDone: Swift.Bool)
-  @objc optional func logout(with logoutType: DragonCopilotTurnkey.LogoutReason)
-  @objc optional func appearanceThemeChanged(to uiTheme: Swift.String)
+@objc public protocol TDictationDelegate {
+  @objc optional func dictationStarted()
+  @objc optional func dictationStopped()
 }
 @objc public protocol TRecordingDelegate {
   @objc optional func recordingStarted()
   @objc optional func recordingFailed()
   @objc optional func recordingStopped()
+  @objc optional func recordingInterrupted(reason: DragonCopilotTurnkey.RecordingInterruptionReason)
+  @objc optional func recordingNotification(notification: DragonCopilotTurnkey.RecordingNotification)
 }
-@objc public protocol TDictationDelegate {
-  @objc optional func dictationStarted()
-  @objc optional func dictationStopped()
+@objc public enum RecordingInterruptionReason : Swift.Int {
+  case systemError
+  case audioInterruption
+  case reachedMaxDuration
+  case incompatibleInputDevice
+  case audioRouteChanged
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-@objc public protocol TConfigurationProvider {
-  @objc func getTConfiguration() -> DragonCopilotTurnkey.TConfiguration
-  @objc func getTAccessTokenProvider() -> any DragonCopilotTurnkey.TAccessTokenProvider
-  @objc func getTUser() -> DragonCopilotTurnkey.TUser
+@objc public enum RecordingNotification : Swift.Int {
+  case reachedWarnDuration
+  case audioLoss
+  case externalMicDetected
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
 }
 @objc public protocol TSessionDataProvider {
   @objc func getTPatient() -> DragonCopilotTurnkey.TPatient
   @objc func getTVisit() -> DragonCopilotTurnkey.TVisit
 }
+@objc public protocol TSettingsDelegate {
+  @objc optional func isIdleTimerDisabled(isOn screenOn: Swift.Bool)
+  @objc optional func appearanceThemeChanged(to uiTheme: Swift.String)
+  @objc optional func changeApplicationLanguage(to languageCode: Swift.String)
+}
+extension DragonCopilotTurnkey.TurnkeyFramework {
+  public static var version: Swift.String {
+    get
+  }
+}
 @_hasMissingDesignatedInitializers @objc public class TurnkeyFramework : ObjectiveC.NSObject {
-  @objc public static func initialize(dataProvider: any DragonCopilotTurnkey.TConfigurationProvider, delegate: (any DragonCopilotTurnkey.TurnKeyDelegate)? = nil, recordingDelegate: (any DragonCopilotTurnkey.TRecordingDelegate)? = nil, dictationDelegate: (any DragonCopilotTurnkey.TDictationDelegate)? = nil) -> DragonCopilotTurnkey.TurnkeyFramework
+  @objc public static func initialize(dataProvider: any DragonCopilotTurnkey.TConfigurationProvider, delegate: (any DragonCopilotTurnkey.TDelegate)? = nil, recordingDelegate: (any DragonCopilotTurnkey.TRecordingDelegate)? = nil, dictationDelegate: (any DragonCopilotTurnkey.TDictationDelegate)? = nil, settingsDelegate: (any DragonCopilotTurnkey.TSettingsDelegate)? = nil) -> DragonCopilotTurnkey.TurnkeyFramework
   @objc public static func dispose()
   public func openSession(sessionDataProvider: any DragonCopilotTurnkey.TSessionDataProvider) -> some SwiftUICore.View
   
   @objc public func openSessionController(sessionDataProvider: any DragonCopilotTurnkey.TSessionDataProvider) -> UIKit.UIViewController
   @objc public func closeSession()
   @objc public func disableLogging()
+  @objc public func developerMode(isON: Swift.Bool = false)
+  @objc public static func isDeveloperModeOn() -> Swift.Bool
   @objc deinit
 }
 extension DragonCopilotTurnkey.LogoutReason : Swift.Equatable {}
 extension DragonCopilotTurnkey.LogoutReason : Swift.Hashable {}
 extension DragonCopilotTurnkey.LogoutReason : Swift.RawRepresentable {}
+extension DragonCopilotTurnkey.RecordingInterruptionReason : Swift.Equatable {}
+extension DragonCopilotTurnkey.RecordingInterruptionReason : Swift.Hashable {}
+extension DragonCopilotTurnkey.RecordingInterruptionReason : Swift.RawRepresentable {}
+extension DragonCopilotTurnkey.RecordingNotification : Swift.Equatable {}
+extension DragonCopilotTurnkey.RecordingNotification : Swift.Hashable {}
+extension DragonCopilotTurnkey.RecordingNotification : Swift.RawRepresentable {}
