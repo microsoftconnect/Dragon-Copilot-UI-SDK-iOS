@@ -10,7 +10,7 @@
 		</data>
 		<key>Configurations.json</key>
 		<data>
-		EhREcAl8LQGodobXkBi6OMC/DcU=
+		hV9va50RJ7SH1sqGwKY1ATy+m/8=
 		</data>
 		<key>DMMModel.momd/DMMModel.mom</key>
 		<data>
@@ -184,11 +184,11 @@
 		</data>
 		<key>Info.plist</key>
 		<data>
-		iOMOnq8khlcPRUViUUtQnsZxmyg=
+		bvweBjqsluzz9fcB933lhWziRXw=
 		</data>
 		<key>Modules/DragonCopilotTurnkey.swiftmodule/arm64-apple-ios-simulator.abi.json</key>
 		<data>
-		hHC3BHN5WSDu4+gbHgHQGCIGg4U=
+		Vm5kLnkU2SYba0btKk3dSFgWjiw=
 		</data>
 		<key>Modules/DragonCopilotTurnkey.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -204,11 +204,11 @@
 		</data>
 		<key>Modules/DragonCopilotTurnkey.swiftmodule/arm64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		juPMD+sVDfnYF7XZdY79pyp3PP8=
+		kmMIxiFQX7kGMn/MXTMJi3D/Zl8=
 		</data>
 		<key>Modules/DragonCopilotTurnkey.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<data>
-		hHC3BHN5WSDu4+gbHgHQGCIGg4U=
+		Vm5kLnkU2SYba0btKk3dSFgWjiw=
 		</data>
 		<key>Modules/DragonCopilotTurnkey.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
 		<data>
@@ -224,7 +224,7 @@
 		</data>
 		<key>Modules/DragonCopilotTurnkey.swiftmodule/x86_64-apple-ios-simulator.swiftmodule</key>
 		<data>
-		miWajmzVQs5ffudkn9yOstXDgbM=
+		yXJOEa8OXsgq+t+GZFtNPv/zZ+M=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -271,7 +271,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			oExsFny2eYRJF4rrSJZM8I68QddRUd0EfqTZstbZ0Qo=
+			dsmT0fizSpyB1Mwnu2RKD7cRGkV+SbABi+Sv3baTAwA=
 			</data>
 		</dict>
 		<key>DMMModel.momd/DMMModel.mom</key>
@@ -481,7 +481,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			Aq1e00y2tMUfWE0nZO3Su8VZ+kfby5/2C6/vctvVzYo=
+			zyjgvc8DtW4YauL+KZX1ss4Gy6PHqiv71oOsHTkofuY=
 			</data>
 		</dict>
 		<key>Modules/DragonCopilotTurnkey.swiftmodule/arm64-apple-ios-simulator.private.swiftinterface</key>
@@ -509,14 +509,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			v21HuoAK09kfMxRRYUsoOjI0D3uEqUjtre/E//XLhpg=
+			uvK6AGwqQuDC2Xw28KLLLbzWULjCeEyrGUBtniQMfzg=
 			</data>
 		</dict>
 		<key>Modules/DragonCopilotTurnkey.swiftmodule/x86_64-apple-ios-simulator.abi.json</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			Aq1e00y2tMUfWE0nZO3Su8VZ+kfby5/2C6/vctvVzYo=
+			zyjgvc8DtW4YauL+KZX1ss4Gy6PHqiv71oOsHTkofuY=
 			</data>
 		</dict>
 		<key>Modules/DragonCopilotTurnkey.swiftmodule/x86_64-apple-ios-simulator.private.swiftinterface</key>
@@ -544,7 +544,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			YWZfjVoqXF0taCo+PgNLP97IDjjuQxnyuN0K3+fqZ4I=
+			EIwo6bCWRitcVZ5HEfE3IDP9Yaf+IEydccMVtYDksRo=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

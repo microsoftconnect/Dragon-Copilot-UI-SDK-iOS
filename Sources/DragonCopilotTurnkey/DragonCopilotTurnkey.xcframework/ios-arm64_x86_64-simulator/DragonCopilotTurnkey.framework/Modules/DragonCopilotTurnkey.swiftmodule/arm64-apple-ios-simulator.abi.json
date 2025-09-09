@@ -7475,41 +7475,41 @@
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/MessageHandlers\/Handlers\/AudioLevelThrottler.swift",
       "kind": "FloatLiteral",
       "offset": 287,
-      "length": 3,
-      "value": "0.5"
+      "length": 4,
+      "value": "0.25"
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/MessageHandlers\/Handlers\/AudioLevelThrottler.swift",
       "kind": "Dictionary",
-      "offset": 347,
-      "length": 3,
-      "value": "[]"
-    },
-    {
-      "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/MessageHandlers\/Handlers\/AudioLevelThrottler.swift",
-      "kind": "Dictionary",
-      "offset": 395,
+      "offset": 348,
       "length": 3,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/MessageHandlers\/Handlers\/AudioLevelThrottler.swift",
       "kind": "Dictionary",
-      "offset": 443,
+      "offset": 396,
       "length": 3,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/MessageHandlers\/Handlers\/AudioLevelThrottler.swift",
       "kind": "Dictionary",
-      "offset": 490,
+      "offset": 444,
+      "length": 3,
+      "value": "[]"
+    },
+    {
+      "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/MessageHandlers\/Handlers\/AudioLevelThrottler.swift",
+      "kind": "Dictionary",
+      "offset": 491,
       "length": 3,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/MessageHandlers\/Handlers\/AudioLevelThrottler.swift",
       "kind": "FloatLiteral",
-      "offset": 776,
+      "offset": 777,
       "length": 3,
       "value": "0.0"
     },
@@ -8263,6 +8263,13 @@
       "value": "[]"
     },
     {
+      "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/NewSession\/ViewModel\/RecorderViewModel.swift",
+      "kind": "BooleanLiteral",
+      "offset": 2057,
+      "length": 5,
+      "value": "false"
+    },
+    {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/OfflineSupport\/WebCacheStorageHandler.swift",
       "kind": "BooleanLiteral",
       "offset": 419,
@@ -8300,7 +8307,7 @@
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/SessionStub\/Protocols\/TStateProtocol.swift",
       "kind": "BooleanLiteral",
-      "offset": 4652,
+      "offset": 7475,
       "length": 5,
       "value": "false"
     },
@@ -8490,20 +8497,20 @@
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/TurnkeyConfigurationService\/Services\/DiscoveryService.swift",
       "kind": "Dictionary",
       "offset": 495,
-      "length": 236,
+      "length": 198,
       "value": "[(\"lab\", 2301463), (\"development\", 2300273), (\"qa\", 2300274), (\"staging\", 2300275), (\"demo\", 2303579), (\"production\", 2300371)]"
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/TurnkeyConfigurationService\/Services\/DiscoveryService.swift",
       "kind": "IntegerLiteral",
-      "offset": 1497,
+      "offset": 1360,
       "length": 1,
       "value": "3"
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/TurnkeyConfigurationService\/Services\/DiscoveryService.swift",
       "kind": "StringLiteral",
-      "offset": 1538,
+      "offset": 1401,
       "length": 42,
       "value": "\"https:\/\/go.microsoft.com\/fwlink\/?linkid=\""
     },
@@ -9063,154 +9070,147 @@
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 3457,
+      "offset": 3423,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 3718,
+      "offset": 3684,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 3845,
+      "offset": 3811,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 3983,
+      "offset": 3949,
       "length": 6,
       "value": "\"info\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 4136,
+      "offset": 4102,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 4269,
+      "offset": 4243,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 4410,
+      "offset": 4380,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 4547,
+      "offset": 4519,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 4686,
+      "offset": 4658,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 4825,
+      "offset": 4783,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 4950,
+      "offset": 4896,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 5063,
+      "offset": 5017,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 5184,
+      "offset": 5144,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 5311,
-      "length": 2,
-      "value": "\"\""
-    },
-    {
-      "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
-      "kind": "StringLiteral",
-      "offset": 5464,
+      "offset": 5297,
       "length": 6,
       "value": "\"true\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 5615,
+      "offset": 5448,
       "length": 6,
       "value": "\"true\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 5724,
+      "offset": 5557,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 5939,
+      "offset": 5772,
       "length": 6,
       "value": "\"true\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 6064,
+      "offset": 5897,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 6193,
+      "offset": 6026,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 6324,
+      "offset": 6157,
       "length": 2,
       "value": "\"\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/Configuration\/Environment.swift",
       "kind": "StringLiteral",
-      "offset": 6447,
+      "offset": 6280,
       "length": 2,
       "value": "\"\""
     },
@@ -9238,7 +9238,7 @@
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/DragonCopilotTurnkey.swift",
       "kind": "BooleanLiteral",
-      "offset": 4796,
+      "offset": 5130,
       "length": 5,
       "value": "false"
     },
