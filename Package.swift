@@ -23,7 +23,7 @@ let package = Package(
             name: "DAXKit",
             path: "Sources/DAXKit/DAXKit.xcframework"
         ),
-        // DragonMedicalSpeechKit Version is 6.2.8.1
+        // DragonMedicalSpeechKit Version is 6.3.32.1
         .binaryTarget(
             name: "DragonMedicalSpeechKit",
             path: "Sources/DragonMedicalSpeechKit/DragonMedicalSpeechKit.xcframework"
