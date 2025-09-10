@@ -224,6 +224,26 @@ NS_ASSUME_NONNULL_BEGIN
 */
 - (void) storeCustomerFeedBack:(int) rating  openedBy:(nonnull NSString*)appName payLoad:(nonnull NSDictionary *)  payLoadDict withCompletionHandler: (void (^)(FeedBackResultCode result))completionHandler;
 
+/** @brief For starting pairing in Separated Client mode
+ @since 6.3
+ */
+- (void) startPairing;
+
+/** @brief Set Pairing Group for Client Communication in Separated Client mode
+    @since 6.3
+
+    Use this method to define a pairing group that allows communication between clients(audio and vuiform) belonging to the same group.
+    @param group NSString*, Mandatory Group Identifier. Use empty string ("") to unset the pairing group.
+*/
+- (void) setPairingGroup:(nonnull NSString *)group;
+
+/** @brief This allows closing and reopening session when clientType is updated
+    @since 6.3
+
+    This method tracks session close and open calls to avoid
+    @param removeOldAudio BOOL,  Mandatory value to keep or delete the old audio before mode change
+*/
+- (void) closeAndReopenForClientTypeChange: (BOOL)removeOldAudio;
 
 NS_ASSUME_NONNULL_END
 @end

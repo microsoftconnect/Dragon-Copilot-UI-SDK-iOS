@@ -26,9 +26,109 @@ public struct RemoteRecording {
   public var recordingDuration: Swift.Int64
   public init()
 }
+
 @_hasMissingDesignatedInitializers @objc public class AppWebViewControllerWrapper : ObjectiveC.NSObject {
   @objc public func getViewController() -> UIKit.UIViewController
   @objc deinit
+}
+@available(*, deprecated, renamed: "ColorAsset.Color", message: "This typealias will be removed in SwiftGen 7.0")
+public typealias AssetColorTypeAlias = DragonCopilotTurnkey.ColorAsset.Color
+@available(*, deprecated, renamed: "ImageAsset.Image", message: "This typealias will be removed in SwiftGen 7.0")
+public typealias AssetImageTypeAlias = DragonCopilotTurnkey.ImageAsset.Image
+public enum Asset {
+  public enum Colors {
+    public static let accentColor: DragonCopilotTurnkey.ColorAsset
+    public static let appearanceBasedText: DragonCopilotTurnkey.ColorAsset
+    public static let backgroundNeutral: DragonCopilotTurnkey.ColorAsset
+    public static let buttonColors: DragonCopilotTurnkey.ColorAsset
+    public static let dangerRed: DragonCopilotTurnkey.ColorAsset
+    public static let disableCircleGray: DragonCopilotTurnkey.ColorAsset
+    public static let disableFontColor: DragonCopilotTurnkey.ColorAsset
+    public static let opaqueBrandBlue: DragonCopilotTurnkey.ColorAsset
+    public static let outlineBlue: DragonCopilotTurnkey.ColorAsset
+    public static let recordingBlue: DragonCopilotTurnkey.ColorAsset
+  }
+  public enum Images {
+    public static let errorIllustration: DragonCopilotTurnkey.ImageAsset
+    public static let loadingIllustration: DragonCopilotTurnkey.ImageAsset
+    public static let warningIllustration: DragonCopilotTurnkey.ImageAsset
+    public static let msftIllustration: DragonCopilotTurnkey.ImageAsset
+    public static let msftLogo: DragonCopilotTurnkey.ImageAsset
+  }
+}
+@_hasMissingDesignatedInitializers final public class ColorAsset {
+  final public var name: Swift.String {
+    get
+  }
+  public typealias Color = UIKit.UIColor
+  @available(iOS 11.0, tvOS 11.0, watchOS 4.0, macOS 10.13, *)
+  final public var color: DragonCopilotTurnkey.ColorAsset.Color {
+    get
+  }
+  @available(iOS 11.0, tvOS 11.0, *)
+  final public func color(compatibleWith traitCollection: UIKit.UITraitCollection) -> DragonCopilotTurnkey.ColorAsset.Color
+  @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  final public var swiftUIColor: SwiftUICore.Color {
+    get
+  }
+  @objc deinit
+}
+extension UIKit.UIColor {
+  @available(iOS 11.0, tvOS 11.0, watchOS 4.0, macOS 10.13, *)
+  convenience public init?(asset: DragonCopilotTurnkey.ColorAsset)
+}
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+extension SwiftUICore.Color {
+  public init(asset: DragonCopilotTurnkey.ColorAsset)
+}
+public struct ImageAsset {
+  public var name: Swift.String {
+    get
+  }
+  public typealias Image = UIKit.UIImage
+  @available(iOS 8.0, tvOS 9.0, watchOS 2.0, macOS 10.7, *)
+  public var image: DragonCopilotTurnkey.ImageAsset.Image {
+    get
+  }
+  @available(iOS 8.0, tvOS 9.0, *)
+  public func image(compatibleWith traitCollection: UIKit.UITraitCollection) -> DragonCopilotTurnkey.ImageAsset.Image
+  @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  public var swiftUIImage: SwiftUICore.Image {
+    get
+  }
+}
+extension UIKit.UIImage {
+  @available(iOS 8.0, tvOS 9.0, watchOS 2.0, *)
+  @available(macOS, deprecated, message: "This initializer is unsafe on macOS, please use the ImageAsset.image property")
+  convenience public init?(asset: DragonCopilotTurnkey.ImageAsset)
+}
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+extension SwiftUICore.Image {
+  public init(asset: DragonCopilotTurnkey.ImageAsset)
+  public init(asset: DragonCopilotTurnkey.ImageAsset, label: SwiftUICore.Text)
+  public init(decorative asset: DragonCopilotTurnkey.ImageAsset)
+}
+public enum L10n {
+  public enum Turnkey {
+    public enum AccessRestricted {
+      public static let description: Swift.String
+      public static let title: Swift.String
+    }
+    public enum App {
+      public static let name: Swift.String
+    }
+    public enum Invalid {
+      public static let description: Swift.String
+      public static let title: Swift.String
+    }
+    public enum Loading {
+      public static let title: Swift.String
+    }
+    public enum Unavailable {
+      public static let description: Swift.String
+      public static let title: Swift.String
+    }
+  }
 }
 @objc public class TAppMetadata : ObjectiveC.NSObject {
   @objc public init(appId: Swift.String? = nil, appVersion: Swift.String? = nil, deviceId: Swift.String? = nil)
