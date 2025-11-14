@@ -11,18 +11,17 @@
     },
     "local" : {
         "ServerEnvironment": "qa",
-        "SubServerEnvironment" : "internal",
         "UseLocalConfiguredUrls": "true",
         "EhrIntegrationServiceUrl": "https://ehr-internal.qa.ppe-copilot.dragon.com",
         "ConfigServiceUrl": "https://apim.qa.ppe-copilot.us.dragon.com/configservice/api/v1",
-        "WebviewUrl": "http://localhost:8088/unibox/drc",
+        "WebviewUrl": "http://localhost:8080",
         "AppInsightsUrl": "InstrumentationKey=c6101377-40e2-4000-8ace-42b8f84c4aa6;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/",
         "LoggingServiceUrl" : "https://apim.qa.ppe-copilot.us.dragon.com/loggingservice/api/v1",
         "DmsUrl" : "https://sas1-qaq3.nuancehce.com",
-        "StreamingScope" : "api://streaming.daxcopilot.com/Data.Write",
-        "ConfigServiceScope" : "api://80b55230-7142-4482-b652-d533155f85f1/ConfigService.Access",
-        "LoggingServiceScope" : "api://e7d08001-28c5-4b4e-b0f0-3df9c7077258/LoggingService.Access",
-        "DefaultAppScope" : "api://nhlsdev.dragonpreview.qa/AppAccess"
+        "StreamingScope" : "7c39e0e4-8c95-4069-883d-89e24351d6ba/.default",
+        "ConfigServiceScope" : "7c39e0e4-8c95-4069-883d-89e24351d6ba/.default",
+        "LoggingServiceScope" : "7c39e0e4-8c95-4069-883d-89e24351d6ba/.default",
+        "DefaultAppScope" : "7c39e0e4-8c95-4069-883d-89e24351d6ba/.default"
     },
     "lab" : {
         "ServerEnvironment": "development",
@@ -40,44 +39,16 @@
     },
     "qa" : {
         "ServerEnvironment": "qa",
-        "StreamingScope" : "api://streaming.daxcopilot.com/Data.Write",
-        "ConfigServiceScope" : "api://80b55230-7142-4482-b652-d533155f85f1/ConfigService.Access",
-        "LoggingServiceScope" : "api://e7d08001-28c5-4b4e-b0f0-3df9c7077258/LoggingService.Access",
-        "DefaultAppScope" : "api://nhlsdev.dragonpreview.qa/AppAccess",
+        "StreamingScope" : "7c39e0e4-8c95-4069-883d-89e24351d6ba/.default",
+        "ConfigServiceScope" : "7c39e0e4-8c95-4069-883d-89e24351d6ba/.default",
+        "LoggingServiceScope" : "7c39e0e4-8c95-4069-883d-89e24351d6ba/.default",
+        "DefaultAppScope" : "7c39e0e4-8c95-4069-883d-89e24351d6ba/.default",
         "UseLocalConfiguredUrls" :"false",
         "EhrIntegrationServiceUrl": "https://ehr-internal.qa.ppe-copilot.dragon.com",
         "ConfigServiceUrl": "https://apim.qa.ppe-copilot.us.dragon.com/configservice/api/v1",
-        "WebviewUrl": "https://www-internal.qa.ppe-copilot.dragon.com/unibox/drc",
-        "LoggingServiceUrl" : "https://apimgmt.qa.ppe-copilot.dragon.com/loggingservice/api/v1",
+        "WebviewUrl": "https://www.qa.ppe-copilot.us.dragon.com/unibox/drc/",
+        "LoggingServiceUrl" : "https://apim.qa.ppe-copilot.dragon.com/loggingservice/api/v1",
         "DmsUrl" : "https://sas1-qaq3.nuancehce.com"
-    },
-    "qa_internal" : {
-        "ServerEnvironment": "qa",
-        "SubServerEnvironment" : "internal",
-        "StreamingScope" : "api://streaming.daxcopilot.com/Data.Write",
-        "ConfigServiceScope" : "api://80b55230-7142-4482-b652-d533155f85f1/ConfigService.Access",
-        "LoggingServiceScope" : "api://e7d08001-28c5-4b4e-b0f0-3df9c7077258/LoggingService.Access",
-        "DefaultAppScope" : "api://nhlsdev.dragonpreview.qa/AppAccess",
-        "UseLocalConfiguredUrls": "false",
-        "EhrIntegrationServiceUrl": "https://ehr-internal.qa.ppe-copilot.dragon.com",
-        "ConfigServiceUrl": "https://apim.qa.ppe-copilot.us.dragon.com/configservice/api/v1",
-        "WebviewUrl": "https://www-internal.qa.ppe-copilot.dragon.com/unibox/drc",
-        "LoggingServiceUrl" : "https://apimgmt.qa.ppe-copilot.dragon.com/loggingservice/api/v1",
-        "DmsUrl" : "https://sas1-qaq3.nuancehce.com"
-    },
-    "qa_1p" : {
-        "ServerEnvironment": "qa",
-        "SubServerEnvironment" : "1p",
-        "StreamingScope" : "api://streaming.daxcopilot.com/Data.Write",
-        "ConfigServiceScope" : "api://80b55230-7142-4482-b652-d533155f85f1/ConfigService.Access",
-        "LoggingServiceScope" : "api://e7d08001-28c5-4b4e-b0f0-3df9c7077258/LoggingService.Access",
-        "DefaultAppScope" : "api://nhlsdev.dragonpreview.qa/AppAccess",
-        "UseLocalConfiguredUrls": "false",
-        "EhrIntegrationServiceUrl": "https://ehr-internal.qa.ppe-copilot.dragon.com",
-        "ConfigServiceUrl": "https://apim.qa.ppe-copilot.us.dragon.com/configservice/api/v1",
-        "LoggingServiceUrl" : "https://apim.qa.ppe-copilot.us.dragon.com/loggingservice/api/v1",
-        "WebviewUrl": "https://test.us.ppe-orion.dragon.com/unibox/drc",
-        "DmsUrl" : "https://sas3-qaq3.nuancehce.com"
     },
     "staging" : {
         "ServerEnvironment": "staging",
@@ -91,6 +62,13 @@
         "WebviewUrl": "https://www.stg.copilot.us.dragon.com/unibox/drc",
         "LoggingServiceUrl" : "https://apim.stg.ppe-copilot.us.dragon.com/loggingservice/api/v1/",
         "DmsUrl" : "https://sas-staging.nuancehce.com"
+    },
+    "demo" : {
+        "ServerEnvironment": "demo",
+        "StreamingScope" : "api://5051e649-12ee-4119-9ae6-92cdbdaf21cc/Data.Write",
+        "ConfigServiceScope" : "api://e47f477f-03ac-4466-ab8a-dedeefdcb129/ConfigService.Access",
+        "LoggingServiceScope" : "api://daa0fe5b-dae5-4e6f-9d55-4356a0930fe9/LoggingService.Access",
+        "DefaultAppScope" : "api://nuancehce.unibox/AppAccess"
     },
     "production" : {
         "ServerEnvironment": "production",
