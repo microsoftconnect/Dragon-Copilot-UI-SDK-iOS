@@ -75,4 +75,9 @@
  */
 - (void) onCloseSession:(BOOL)audioDeleted;
 
+/** @brief
+ This message is send when running in theia mode, and error is received
+ */
+- (void) onError:(NSNumber *)errorCode message:(NSString *)message title:(NSString *)title htmlMessage:(NSString *)htmlMessage;
+
 @end
