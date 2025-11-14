@@ -1,7 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 6.0.3 effective-5.10 (swiftlang-6.0.3.1.10 clang-1600.0.30.1)
-// swift-module-flags: -target arm64-apple-ios17.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-bare-slash-regex -module-name DragonCopilotTurnkey
-// swift-module-flags-ignorable: -no-verify-emitted-module-interface
+// swift-compiler-version: Apple Swift version 6.1.2 effective-5.10 (swiftlang-6.1.2.1.2 clang-1700.0.13.5)
+// swift-module-flags: -target arm64-apple-ios17.0-simulator -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -enable-experimental-feature DebugDescriptionMacro -enable-bare-slash-regex -module-name DragonCopilotTurnkey
+// swift-module-flags-ignorable: -no-verify-emitted-module-interface -interface-compiler-version 6.1.2
 import AVFoundation
 import CallKit
 import Combine
@@ -20,50 +20,191 @@ import _Concurrency
 import _StringProcessing
 import _SwiftConcurrencyShims
 import os
-public struct RemoteRecording {
-  public var recordingID: Swift.String?
-  public var startTime: Foundation.Date
-  public var recordingDuration: Swift.Int64
-  public init()
+@objc public protocol TRecordingDelegate {
+  @objc optional func recordingStarted()
+  @objc optional func recordingFailed()
+  @objc optional func recordingStopped()
+  @objc optional func recordingInterrupted(reason: DragonCopilotTurnkey.RecordingInterruptionReason)
+  @objc optional func recordingNotification(notification: DragonCopilotTurnkey.RecordingNotification)
 }
-@_hasMissingDesignatedInitializers @objc public class AppWebViewControllerWrapper : ObjectiveC.NSObject {
-  @objc public func getViewController() -> UIKit.UIViewController
-  @objc deinit
+@objc public enum RecordingInterruptionReason : Swift.Int {
+  case systemError
+  case audioInterruption
+  case reachedMaxDuration
+  case incompatibleInputDevice
+  case audioRouteChanged
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
 }
-@objc public class TAppMetadata : ObjectiveC.NSObject {
-  @objc public init(appId: Swift.String? = nil, appVersion: Swift.String? = nil, deviceId: Swift.String? = nil)
-  public init(appId: Swift.String? = nil, appVersion: Swift.String? = nil, deviceId: Swift.String? = nil, internalClient: Swift.Bool = false)
-  @objc deinit
-}
-@objc public class TConfiguration : ObjectiveC.NSObject {
-  @objc public init(appMetadata: DragonCopilotTurnkey.TAppMetadata, serverDetails: DragonCopilotTurnkey.TServerDetails, partnerId: Swift.String? = nil, customerId: Swift.String? = nil, ehrInstanceId: Swift.String? = nil, productId: Swift.String? = nil, traceId: Swift.String? = nil)
-  @objc deinit
-}
-@_inheritsConvenienceInitializers @objc final public class TConstants : ObjectiveC.NSObject {
-  public static let defaultGeography: Swift.String
-  public static let defaultCloudInstance: Swift.String
-  public static let defaultEnvironment: Swift.String
-  public static let defaultReportingLocale: Swift.String
-  public static let defaultUXLocale: Swift.String
-  public static let defaultRecordingLocale: Swift.String
-  public static let unavailable: Swift.String
-  @objc override dynamic public init()
-  @objc deinit
-}
-@objc public class TPatient : ObjectiveC.NSObject {
-  @objc public init(id: Swift.String? = nil, fhirId: Swift.String? = nil, firstName: Swift.String? = nil, lastName: Swift.String? = nil, middleName: Swift.String? = nil, gender: Swift.String? = nil, birthDate: Foundation.Date? = nil, medicalRecordNumber: Swift.String? = nil)
-  @objc deinit
+@objc public enum RecordingNotification : Swift.Int {
+  case reachedWarnDuration
+  case audioLoss
+  case externalMicDetected
+  public init?(rawValue: Swift.Int)
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
 }
 @objc public class TServerDetails : ObjectiveC.NSObject {
   @objc public init(environment: Swift.String? = TConstants.defaultEnvironment, geography: Swift.String? = nil, cloudInstance: Swift.String? = nil)
   @objc deinit
 }
-@objc public class TUser : ObjectiveC.NSObject {
-  @objc public init(id: Swift.String? = nil, fhirId: Swift.String? = nil, firstName: Swift.String? = nil, middleName: Swift.String? = nil, lastName: Swift.String? = nil, ehrUserId: Swift.String? = nil)
-  @objc deinit
+extension DragonCopilotTurnkey.TurnkeyFramework {
+  public static var version: Swift.String {
+    get
+  }
+}
+@objc public protocol TSettingsDelegate {
+  @objc optional func isIdleTimerDisabled(isOn screenOn: Swift.Bool)
+  @objc optional func appearanceThemeChanged(to uiTheme: Swift.String)
+  @objc optional func changeApplicationLanguage(to languageCode: Swift.String)
+}
+public enum L10n {
+  public enum Turnkey {
+    public enum AccessRestricted {
+      public static let description: Swift.String
+      public static let title: Swift.String
+    }
+    public enum App {
+      public static let name: Swift.String
+    }
+    public enum Invalid {
+      public static let description: Swift.String
+      public static let title: Swift.String
+    }
+    public enum Loading {
+      public static let title: Swift.String
+    }
+    public enum Unavailable {
+      public static let description: Swift.String
+      public static let title: Swift.String
+    }
+  }
 }
 @objc public class TVisit : ObjectiveC.NSObject {
   @objc public init(id: Swift.String? = nil, fhirId: Swift.String? = nil, correlationId: Swift.String? = nil, metadata: Swift.String? = nil, reasonForVisit: Swift.String? = nil)
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @objc public class AppWebViewControllerWrapper : ObjectiveC.NSObject {
+  @objc public func getViewController() -> UIKit.UIViewController
+  @objc deinit
+}
+@_hasMissingDesignatedInitializers @objc public class TurnkeyFramework : ObjectiveC.NSObject {
+  @objc public static func initialize(dataProvider: any DragonCopilotTurnkey.TConfigurationProvider, delegate: (any DragonCopilotTurnkey.TDelegate)? = nil, recordingDelegate: (any DragonCopilotTurnkey.TRecordingDelegate)? = nil, dictationDelegate: (any DragonCopilotTurnkey.TDictationDelegate)? = nil, settingsDelegate: (any DragonCopilotTurnkey.TSettingsDelegate)? = nil) -> DragonCopilotTurnkey.TurnkeyFramework
+  @objc public static func dispose()
+  public func openSession(sessionDataProvider: any DragonCopilotTurnkey.TSessionDataProvider) -> some SwiftUICore.View
+  
+  @objc public func openSessionController(sessionDataProvider: any DragonCopilotTurnkey.TSessionDataProvider) -> UIKit.UIViewController
+  @objc public func closeSession()
+  @objc public func disableLogging()
+  @objc public func developerMode(isON: Swift.Bool = false)
+  @objc public static func isDeveloperModeOn() -> Swift.Bool
+  @objc deinit
+}
+@objc public protocol TConfigurationProvider {
+  @objc func getTConfiguration() -> DragonCopilotTurnkey.TConfiguration
+  @objc func getTAccessTokenProvider() -> any DragonCopilotTurnkey.TAccessTokenProvider
+  @objc func getTUser() -> DragonCopilotTurnkey.TUser
+}
+@objc public class TConfiguration : ObjectiveC.NSObject {
+  @objc public init(appMetadata: DragonCopilotTurnkey.TAppMetadata, serverDetails: DragonCopilotTurnkey.TServerDetails, partnerId: Swift.String? = nil, customerId: Swift.String? = nil, ehrInstanceId: Swift.String? = nil, productId: Swift.String? = nil, traceId: Swift.String? = nil)
+  @objc deinit
+}
+@objc public protocol TDictationDelegate {
+  @objc optional func dictationStarted()
+  @objc optional func dictationStopped()
+}
+@objc public class TPatient : ObjectiveC.NSObject {
+  @objc public init(id: Swift.String? = nil, fhirId: Swift.String? = nil, firstName: Swift.String? = nil, lastName: Swift.String? = nil, middleName: Swift.String? = nil, gender: Swift.String? = nil, birthDate: Foundation.Date? = nil, medicalRecordNumber: Swift.String? = nil)
+  @objc deinit
+}
+@objc public protocol TSessionDataProvider {
+  @objc func getTPatient() -> DragonCopilotTurnkey.TPatient
+  @objc func getTVisit() -> DragonCopilotTurnkey.TVisit
+}
+@available(*, deprecated, renamed: "ColorAsset.Color", message: "This typealias will be removed in SwiftGen 7.0")
+public typealias AssetColorTypeAlias = DragonCopilotTurnkey.ColorAsset.Color
+@available(*, deprecated, renamed: "ImageAsset.Image", message: "This typealias will be removed in SwiftGen 7.0")
+public typealias AssetImageTypeAlias = DragonCopilotTurnkey.ImageAsset.Image
+public enum Asset {
+  public enum Colors {
+    public static let accentColor: DragonCopilotTurnkey.ColorAsset
+    public static let appearanceBasedText: DragonCopilotTurnkey.ColorAsset
+    public static let backgroundNeutral: DragonCopilotTurnkey.ColorAsset
+    public static let buttonColors: DragonCopilotTurnkey.ColorAsset
+    public static let dangerRed: DragonCopilotTurnkey.ColorAsset
+    public static let disableCircleGray: DragonCopilotTurnkey.ColorAsset
+    public static let disableFontColor: DragonCopilotTurnkey.ColorAsset
+    public static let opaqueBrandBlue: DragonCopilotTurnkey.ColorAsset
+    public static let outlineBlue: DragonCopilotTurnkey.ColorAsset
+    public static let recordingBlue: DragonCopilotTurnkey.ColorAsset
+  }
+  public enum Images {
+    public static let errorIllustration: DragonCopilotTurnkey.ImageAsset
+    public static let loadingIllustration: DragonCopilotTurnkey.ImageAsset
+    public static let warningIllustration: DragonCopilotTurnkey.ImageAsset
+    public static let msftIllustration: DragonCopilotTurnkey.ImageAsset
+    public static let msftLogo: DragonCopilotTurnkey.ImageAsset
+  }
+}
+@_hasMissingDesignatedInitializers final public class ColorAsset {
+  final public var name: Swift.String {
+    get
+  }
+  public typealias Color = UIKit.UIColor
+  @available(iOS 11.0, tvOS 11.0, watchOS 4.0, macOS 10.13, *)
+  final public var color: DragonCopilotTurnkey.ColorAsset.Color {
+    get
+  }
+  @available(iOS 11.0, tvOS 11.0, *)
+  final public func color(compatibleWith traitCollection: UIKit.UITraitCollection) -> DragonCopilotTurnkey.ColorAsset.Color
+  @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  final public var swiftUIColor: SwiftUICore.Color {
+    get
+  }
+  @objc deinit
+}
+extension UIKit.UIColor {
+  @available(iOS 11.0, tvOS 11.0, watchOS 4.0, macOS 10.13, *)
+  convenience public init?(asset: DragonCopilotTurnkey.ColorAsset)
+}
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+extension SwiftUICore.Color {
+  public init(asset: DragonCopilotTurnkey.ColorAsset)
+}
+public struct ImageAsset {
+  public var name: Swift.String {
+    get
+  }
+  public typealias Image = UIKit.UIImage
+  @available(iOS 8.0, tvOS 9.0, watchOS 2.0, macOS 10.7, *)
+  public var image: DragonCopilotTurnkey.ImageAsset.Image {
+    get
+  }
+  @available(iOS 8.0, tvOS 9.0, *)
+  public func image(compatibleWith traitCollection: UIKit.UITraitCollection) -> DragonCopilotTurnkey.ImageAsset.Image
+  @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  public var swiftUIImage: SwiftUICore.Image {
+    get
+  }
+}
+extension UIKit.UIImage {
+  @available(iOS 8.0, tvOS 9.0, watchOS 2.0, *)
+  @available(macOS, deprecated, message: "This initializer is unsafe on macOS, please use the ImageAsset.image property")
+  convenience public init?(asset: DragonCopilotTurnkey.ImageAsset)
+}
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+extension SwiftUICore.Image {
+  public init(asset: DragonCopilotTurnkey.ImageAsset)
+  public init(asset: DragonCopilotTurnkey.ImageAsset, label: SwiftUICore.Text)
+  public init(decorative asset: DragonCopilotTurnkey.ImageAsset)
+}
+@objc public class TUser : ObjectiveC.NSObject {
+  @objc public init(id: Swift.String? = nil, fhirId: Swift.String? = nil, firstName: Swift.String? = nil, middleName: Swift.String? = nil, lastName: Swift.String? = nil, ehrUserId: Swift.String? = nil)
   @objc deinit
 }
 @objc public class TTokenResponse : ObjectiveC.NSObject {
@@ -98,10 +239,16 @@ public struct RemoteRecording {
 extension DragonCopilotTurnkey.TAccessTokenProvider {
   public func accessTokenAsync(scopes: [Swift.String]? = nil, forceRefresh: Swift.Bool = false) async throws -> DragonCopilotTurnkey.TAuthResponse
 }
-@objc public protocol TConfigurationProvider {
-  @objc func getTConfiguration() -> DragonCopilotTurnkey.TConfiguration
-  @objc func getTAccessTokenProvider() -> any DragonCopilotTurnkey.TAccessTokenProvider
-  @objc func getTUser() -> DragonCopilotTurnkey.TUser
+@objc public class TAppMetadata : ObjectiveC.NSObject {
+  @objc public init(appId: Swift.String? = nil, appVersion: Swift.String? = nil, deviceId: Swift.String? = nil)
+  public init(appId: Swift.String? = nil, appVersion: Swift.String? = nil, deviceId: Swift.String? = nil, internalClient: Swift.Bool = false)
+  @objc deinit
+}
+public struct RemoteRecording {
+  public var recordingID: Swift.String?
+  public var startTime: Foundation.Date
+  public var recordingDuration: Swift.Int64
+  public init()
 }
 @objc public protocol TDelegate {
   @objc optional func isTurnKeyWebViewLoaded(_ isLoadingDone: Swift.Bool)
@@ -116,71 +263,24 @@ extension DragonCopilotTurnkey.TAccessTokenProvider {
     get
   }
 }
-@objc public protocol TDictationDelegate {
-  @objc optional func dictationStarted()
-  @objc optional func dictationStopped()
-}
-@objc public protocol TRecordingDelegate {
-  @objc optional func recordingStarted()
-  @objc optional func recordingFailed()
-  @objc optional func recordingStopped()
-  @objc optional func recordingInterrupted(reason: DragonCopilotTurnkey.RecordingInterruptionReason)
-  @objc optional func recordingNotification(notification: DragonCopilotTurnkey.RecordingNotification)
-}
-@objc public enum RecordingInterruptionReason : Swift.Int {
-  case systemError
-  case audioInterruption
-  case reachedMaxDuration
-  case incompatibleInputDevice
-  case audioRouteChanged
-  public init?(rawValue: Swift.Int)
-  public typealias RawValue = Swift.Int
-  public var rawValue: Swift.Int {
-    get
-  }
-}
-@objc public enum RecordingNotification : Swift.Int {
-  case reachedWarnDuration
-  case audioLoss
-  case externalMicDetected
-  public init?(rawValue: Swift.Int)
-  public typealias RawValue = Swift.Int
-  public var rawValue: Swift.Int {
-    get
-  }
-}
-@objc public protocol TSessionDataProvider {
-  @objc func getTPatient() -> DragonCopilotTurnkey.TPatient
-  @objc func getTVisit() -> DragonCopilotTurnkey.TVisit
-}
-@objc public protocol TSettingsDelegate {
-  @objc optional func isIdleTimerDisabled(isOn screenOn: Swift.Bool)
-  @objc optional func appearanceThemeChanged(to uiTheme: Swift.String)
-  @objc optional func changeApplicationLanguage(to languageCode: Swift.String)
-}
-extension DragonCopilotTurnkey.TurnkeyFramework {
-  public static var version: Swift.String {
-    get
-  }
-}
-@_hasMissingDesignatedInitializers @objc public class TurnkeyFramework : ObjectiveC.NSObject {
-  @objc public static func initialize(dataProvider: any DragonCopilotTurnkey.TConfigurationProvider, delegate: (any DragonCopilotTurnkey.TDelegate)? = nil, recordingDelegate: (any DragonCopilotTurnkey.TRecordingDelegate)? = nil, dictationDelegate: (any DragonCopilotTurnkey.TDictationDelegate)? = nil, settingsDelegate: (any DragonCopilotTurnkey.TSettingsDelegate)? = nil) -> DragonCopilotTurnkey.TurnkeyFramework
-  @objc public static func dispose()
-  public func openSession(sessionDataProvider: any DragonCopilotTurnkey.TSessionDataProvider) -> some SwiftUICore.View
-  
-  @objc public func openSessionController(sessionDataProvider: any DragonCopilotTurnkey.TSessionDataProvider) -> UIKit.UIViewController
-  @objc public func closeSession()
-  @objc public func disableLogging()
-  @objc public func developerMode(isON: Swift.Bool = false)
-  @objc public static func isDeveloperModeOn() -> Swift.Bool
+@_inheritsConvenienceInitializers @objc final public class TConstants : ObjectiveC.NSObject {
+  public static let defaultGeography: Swift.String
+  public static let defaultCloudInstance: Swift.String
+  public static let defaultEnvironment: Swift.String
+  public static let defaultReportingLocale: Swift.String
+  public static let defaultUXLocale: Swift.String
+  public static let defaultRecordingLocale: Swift.String
+  public static let unavailable: Swift.String
+  @objc override dynamic public init()
   @objc deinit
 }
-extension DragonCopilotTurnkey.LogoutReason : Swift.Equatable {}
-extension DragonCopilotTurnkey.LogoutReason : Swift.Hashable {}
-extension DragonCopilotTurnkey.LogoutReason : Swift.RawRepresentable {}
+
 extension DragonCopilotTurnkey.RecordingInterruptionReason : Swift.Equatable {}
 extension DragonCopilotTurnkey.RecordingInterruptionReason : Swift.Hashable {}
 extension DragonCopilotTurnkey.RecordingInterruptionReason : Swift.RawRepresentable {}
 extension DragonCopilotTurnkey.RecordingNotification : Swift.Equatable {}
 extension DragonCopilotTurnkey.RecordingNotification : Swift.Hashable {}
 extension DragonCopilotTurnkey.RecordingNotification : Swift.RawRepresentable {}
+extension DragonCopilotTurnkey.LogoutReason : Swift.Equatable {}
+extension DragonCopilotTurnkey.LogoutReason : Swift.Hashable {}
+extension DragonCopilotTurnkey.LogoutReason : Swift.RawRepresentable {}

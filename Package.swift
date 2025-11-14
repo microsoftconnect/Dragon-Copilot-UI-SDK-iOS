@@ -1,6 +1,6 @@
 // swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
-
+// DragonMedicalSpeechKit Version is 6.3.32.1
 import PackageDescription
 
 let package = Package(
@@ -23,11 +23,6 @@ let package = Package(
             name: "DAXKit",
             path: "Sources/DAXKit/DAXKit.xcframework"
         ),
-        // DragonMedicalSpeechKit Version is 6.2.8.1
-        .binaryTarget(
-            name: "DragonMedicalSpeechKit",
-            path: "Sources/DragonMedicalSpeechKit/DragonMedicalSpeechKit.xcframework"
-        ),
         .binaryTarget(
             name: "MicrosoftCognitiveServicesSpeech",
             path: "Sources/MicrosoftCognitiveServicesSpeech/MicrosoftCognitiveServicesSpeech.xcframework"
@@ -36,7 +31,6 @@ let package = Package(
             name: "DragonCopilotTurnkeyDependencies",
             dependencies: [
                 "DAXKit",
-                "DragonMedicalSpeechKit",
                 "MicrosoftCognitiveServicesSpeech"
             ],
             path: "Sources/DragonCopilotTurnkeyDependencies"
