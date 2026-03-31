@@ -305,149 +305,25 @@ typedef unsigned int swift_uint4  __attribute__((__ext_vector_type__(4)));
 
 #if defined(__OBJC__)
 
-@class UIViewController;
-SWIFT_CLASS("_TtC20DragonCopilotTurnkey27AppWebViewControllerWrapper")
-@interface AppWebViewControllerWrapper : NSObject
-- (UIViewController * _Nonnull)getViewController SWIFT_WARN_UNUSED_RESULT;
-- (nonnull instancetype)init SWIFT_UNAVAILABLE;
-+ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
-@end
-
-/// Represents the reason for user logout from the TurnKey framework
-typedef SWIFT_ENUM(NSInteger, LogoutReason, open) {
-/// User initiated logout
-  LogoutReasonUser = 0,
-/// Logout due to inactivity timeout
-  LogoutReasonInactivity = 1,
-};
-
-/// Represents the different reasons why a recording might be stopped
-typedef SWIFT_ENUM(NSInteger, RecordingInterruptionReason, open) {
-/// Recording automatically stopped due to a system error
-  RecordingInterruptionReasonSystemError = 0,
-/// Recording automatically stopped due to audio interruption (e.g., phone call)
-  RecordingInterruptionReasonAudioInterruption = 1,
-/// Recording automatically stopped because maximum duration was reached
-  RecordingInterruptionReasonReachedMaxDuration = 2,
-/// Recording automatically stopped due to incompatible input device
-  RecordingInterruptionReasonIncompatibleInputDevice = 3,
-/// Recording automatically stopped due to audio route change
-  RecordingInterruptionReasonAudioRouteChanged = 4,
-};
-
-/// Represents different notifications and warnings during recording
-typedef SWIFT_ENUM(NSInteger, RecordingNotification, open) {
-/// Warning because warning duration was reached
-  RecordingNotificationReachedWarnDuration = 0,
-/// Notification due to audio loss
-  RecordingNotificationAudioLoss = 1,
-/// Notification because external microphone was detected
-  RecordingNotificationExternalMicDetected = 2,
-};
-
 @class NSString;
-@class TAuthResponse;
+@class ClientTokenProvider;
 /// Protocol for a class that provides a valid access token for the Turnkey SDK.
 /// \param scopes Optional scope string for token generation (default is nil).
 ///
 /// \param forceRefresh Boolean indicating whether to force refresh the token (default is false).
 ///
-/// \param onSuccess Callback that returns the <code>TTokenResponse</code> if the token is successfully retrieved.
+/// \param onSuccess Callback that returns the <code>ClientTokenProvider</code> if the token is successfully retrieved.
 ///
 /// \param onFailure Callback that returns an error if token retrieval fails.
 ///
-SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey20TAccessTokenProvider_")
-@protocol TAccessTokenProvider
-- (void)accessTokenWithScopes:(NSArray<NSString *> * _Nullable)scopes forceRefresh:(BOOL)forceRefresh onSuccess:(void (^ _Nonnull)(TAuthResponse * _Nonnull))onSuccess onFailure:(void (^ _Nonnull)(NSError * _Nonnull))onFailure;
-@end
-
-SWIFT_CLASS("_TtC20DragonCopilotTurnkey12TAppMetadata")
-@interface TAppMetadata : NSObject
-/// Initializes a new instance of <code>TAppMetadata</code>.
-- (nonnull instancetype)initWithAppId:(NSString * _Nullable)appId appVersion:(NSString * _Nullable)appVersion deviceId:(NSString * _Nullable)deviceId OBJC_DESIGNATED_INITIALIZER;
-- (nonnull instancetype)init SWIFT_UNAVAILABLE;
-+ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
-@end
-
-@class TTokenResponse;
-@class TEntraTokenResponse;
-@class TSoFTokenResponse;
-/// Container class to hold different types of authentication responses.
-SWIFT_CLASS("_TtC20DragonCopilotTurnkey13TAuthResponse")
-@interface TAuthResponse : NSObject
-@property (nonatomic, readonly, strong) TTokenResponse * _Nullable tokenResponse;
-@property (nonatomic, readonly, strong) TEntraTokenResponse * _Nullable entraTokenResponse;
-@property (nonatomic, readonly, strong) TSoFTokenResponse * _Nullable sofTokenResponse;
-/// Convenience initializer for <code>TTokenResponse</code>.
-/// \param tokenResponse An instance of <code>TTokenResponse</code>.
-///
-- (nonnull instancetype)initWithTokenResponse:(TTokenResponse * _Nonnull)tokenResponse;
-/// Convenience initializer for <code>TEntraTokenResponse</code>.
-/// \param entraTokenResponse An instance of <code>TEntraTokenResponse</code>.
-///
-- (nonnull instancetype)initWithEntraTokenResponse:(TEntraTokenResponse * _Nonnull)entraTokenResponse;
-/// Convenience initializer for <code>TSoFTokenResponse</code>.
-/// \param sofTokenResponse An instance of <code>TSoFTokenResponse</code>.
-///
-- (nonnull instancetype)initWithSofTokenResponse:(TSoFTokenResponse * _Nonnull)sofTokenResponse;
-- (nonnull instancetype)init SWIFT_UNAVAILABLE;
-+ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
-@end
-
-@class TServerDetails;
-/// Configuration for the Turnkey SDK
-SWIFT_CLASS("_TtC20DragonCopilotTurnkey14TConfiguration")
-@interface TConfiguration : NSObject
-/// Initializes a new instance of `TConfiguration
-- (nonnull instancetype)initWithAppMetadata:(TAppMetadata * _Nonnull)appMetadata serverDetails:(TServerDetails * _Nonnull)serverDetails partnerId:(NSString * _Nullable)partnerId customerId:(NSString * _Nullable)customerId ehrInstanceId:(NSString * _Nullable)ehrInstanceId productId:(NSString * _Nullable)productId traceId:(NSString * _Nullable)traceId OBJC_DESIGNATED_INITIALIZER;
-- (nonnull instancetype)init SWIFT_UNAVAILABLE;
-+ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
-@end
-
-@class TUser;
-/// Protocol for providing configuration data to the TurnKey framework
-SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey22TConfigurationProvider_")
-@protocol TConfigurationProvider
-/// Returns the configuration for the TurnKey framework
-///
-/// returns:
-/// The configuration object
-- (TConfiguration * _Nonnull)getTConfiguration SWIFT_WARN_UNUSED_RESULT;
-/// Returns the access token provider for authentication
-///
-/// returns:
-/// The access token provider
-- (id <TAccessTokenProvider> _Nonnull)getTAccessTokenProvider SWIFT_WARN_UNUSED_RESULT;
-/// Returns the user information
-///
-/// returns:
-/// The user object
-- (TUser * _Nonnull)getTUser SWIFT_WARN_UNUSED_RESULT;
-@end
-
-/// Constants
-SWIFT_CLASS("_TtC20DragonCopilotTurnkey10TConstants")
-@interface TConstants : NSObject
-- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
-@end
-
-/// Protocol defining events for the TurnKey framework that clients can implement
-SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey9TDelegate_")
-@protocol TDelegate
-@optional
-/// Called when the WebView finishes loading
-/// \param isLoadingDone Indicates whether the web view has finished loading
-///
-- (void)isTurnKeyWebViewLoaded:(BOOL)isLoadingDone;
-/// Notifies when a logout occurs
-/// \param logoutType The reason for the logout (user initiated or inactivity)
-///
-- (void)logoutWith:(enum LogoutReason)logoutType;
+SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey22AppAccessTokenProvider_")
+@protocol AppAccessTokenProvider
+- (void)accessTokenWithScopes:(NSArray<NSString *> * _Nullable)scopes forceRefresh:(BOOL)forceRefresh onSuccess:(void (^ _Nonnull)(ClientTokenProvider * _Nonnull))onSuccess onFailure:(void (^ _Nonnull)(NSError * _Nonnull))onFailure;
 @end
 
 /// Protocol defining dictation-related events that clients can implement
-SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey18TDictationDelegate_")
-@protocol TDictationDelegate
+SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey20AppDictationDelegate_")
+@protocol AppDictationDelegate
 @optional
 /// Called when dictation starts
 - (void)dictationStarted;
@@ -455,42 +331,36 @@ SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey18TDictationDelegate_")
 - (void)dictationStopped;
 @end
 
-/// Base class for token responses used in the Turnkey SDK.
-/// \param token The access token string.
+/// Protocol defining internal client events that internal clients can implement
+/// This is only available for internal Microsoft clients and provides access to SDK internal telemetry and diagnostic events
+SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey19AppInternalDelegate_")
+@protocol AppInternalDelegate
+@optional
+/// Called when SDK telemetry data is available
+/// \param eventName The name/type of the telemetry event
 ///
-SWIFT_CLASS("_TtC20DragonCopilotTurnkey14TTokenResponse")
-@interface TTokenResponse : NSObject
-@property (nonatomic, readonly, copy) NSString * _Nonnull token;
-- (nonnull instancetype)initWithToken:(NSString * _Nonnull)token OBJC_DESIGNATED_INITIALIZER;
-- (nonnull instancetype)init SWIFT_UNAVAILABLE;
-+ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+/// \param eventData Dictionary containing the telemetry event data
+///
+- (void)telemetryEventWithEventName:(NSString * _Nonnull)eventName eventData:(NSDictionary<NSString *, id> * _Nonnull)eventData;
+/// Called when SDK diagnostic information is available
+/// \param diagnosticType The type of diagnostic event
+///
+/// \param diagnosticData Dictionary containing the diagnostic data
+///
+- (void)diagnosticEventWithDiagnosticType:(NSString * _Nonnull)diagnosticType diagnosticData:(NSDictionary<NSString *, id> * _Nonnull)diagnosticData;
+/// Called when SDK internal state changes
+/// \param stateChange Description of the state change
+///
+/// \param newState The new state value
+///
+- (void)internalStateChangedWithStateChange:(NSString * _Nonnull)stateChange newState:(NSString * _Nonnull)newState;
 @end
 
-@class NSDate;
-/// Token response for Entra authentication.
-/// \param token The access token string.
-///
-/// \param expiresAt The expiration date of the token.
-///
-SWIFT_CLASS("_TtC20DragonCopilotTurnkey19TEntraTokenResponse")
-@interface TEntraTokenResponse : TTokenResponse
-@property (nonatomic, readonly, copy) NSDate * _Nonnull expiresAt;
-- (nonnull instancetype)initWithToken:(NSString * _Nonnull)token expiresAt:(NSDate * _Nonnull)expiresAt OBJC_DESIGNATED_INITIALIZER;
-- (nonnull instancetype)initWithToken:(NSString * _Nonnull)token SWIFT_UNAVAILABLE;
-@end
-
-/// Represents details for a patient.
-SWIFT_CLASS("_TtC20DragonCopilotTurnkey8TPatient")
-@interface TPatient : NSObject
-/// Initializes a new instance of <code>TPatient</code>.
-- (nonnull instancetype)initWithId:(NSString * _Nullable)id fhirId:(NSString * _Nullable)fhirId firstName:(NSString * _Nullable)firstName lastName:(NSString * _Nullable)lastName middleName:(NSString * _Nullable)middleName gender:(NSString * _Nullable)gender birthDate:(NSDate * _Nullable)birthDate medicalRecordNumber:(NSString * _Nullable)medicalRecordNumber OBJC_DESIGNATED_INITIALIZER;
-- (nonnull instancetype)init SWIFT_UNAVAILABLE;
-+ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
-@end
-
+enum RecordingStopReason : NSInteger;
+enum RecordingProgressNotification : NSInteger;
 /// Protocol defining recording-related events that clients can implement
-SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey18TRecordingDelegate_")
-@protocol TRecordingDelegate
+SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey20AppRecordingDelegate_")
+@protocol AppRecordingDelegate
 @optional
 /// Called when recording starts successfully
 - (void)recordingStarted;
@@ -501,40 +371,16 @@ SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey18TRecordingDelegate_")
 /// Called when recording is interrupted and automatically stopped
 /// \param reason The reason why recording was automatically stopped
 ///
-- (void)recordingInterruptedWithReason:(enum RecordingInterruptionReason)reason;
+- (void)recordingInterruptedWithReason:(enum RecordingStopReason)reason;
 /// Called when a notification or warning occurs during recording
 /// \param notification The type of notification or warning
 ///
-- (void)recordingNotificationWithNotification:(enum RecordingNotification)notification;
-@end
-
-SWIFT_CLASS("_TtC20DragonCopilotTurnkey14TServerDetails")
-@interface TServerDetails : NSObject
-/// Initializes a new instance of <code>TConfiguration</code>.
-- (nonnull instancetype)initWithEnvironment:(NSString * _Nullable)environment geography:(NSString * _Nullable)geography cloudInstance:(NSString * _Nullable)cloudInstance OBJC_DESIGNATED_INITIALIZER;
-- (nonnull instancetype)init SWIFT_UNAVAILABLE;
-+ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
-@end
-
-@class TVisit;
-/// Protocol for providing session data to the TurnKey framework
-SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey20TSessionDataProvider_")
-@protocol TSessionDataProvider
-/// Returns the patient information for the current session
-///
-/// returns:
-/// The patient object
-- (TPatient * _Nonnull)getTPatient SWIFT_WARN_UNUSED_RESULT;
-/// Returns the visit information for the current session
-///
-/// returns:
-/// The visit object
-- (TVisit * _Nonnull)getTVisit SWIFT_WARN_UNUSED_RESULT;
+- (void)recordingNotificationWithNotification:(enum RecordingProgressNotification)notification;
 @end
 
 /// Protocol defining settings-related events that clients can implement
-SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey17TSettingsDelegate_")
-@protocol TSettingsDelegate
+SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey19AppSettingsDelegate_")
+@protocol AppSettingsDelegate
 @optional
 /// Called when the screen-on-while-recording setting changes
 /// \param screenOn Indicates whether the screen should stay on while recording
@@ -547,53 +393,265 @@ SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey17TSettingsDelegate_")
 /// Called when the application language needs to be changed
 /// \param languageCode Indicates configured UI or Application Locale value. Example: “en-US”, “es-US”
 ///
-- (void)changeApplicationLanguageTo:(NSString * _Nonnull)languageCode;
+- (void)applicationLanguageChangedTo:(NSString * _Nonnull)languageCode;
 @end
 
-/// Token response for SMART on FHIR (SoF) authentication.
-/// \param token The access token string.
+enum SignOutReason : NSInteger;
+/// Protocol defining events for the TurnKey framework that clients can implement
+SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey13AppUiDelegate_")
+@protocol AppUiDelegate
+@optional
+/// Called when the WebView finishes loading
+/// \param isLoadingDone Indicates whether the web view has finished loading
 ///
-/// \param issuer The issuer URL for SMART on FHIR authentication.
+- (void)webViewLoaded:(BOOL)isLoadingDone;
+/// Notifies when a logout occurs
+/// \param logoutType The reason for the logout (user initiated, inactivity, navigate away, or environment change)
 ///
-/// \param launch The launch code for SMART on FHIR authentication.
-///
-SWIFT_CLASS("_TtC20DragonCopilotTurnkey17TSoFTokenResponse")
-@interface TSoFTokenResponse : NSObject
-@property (nonatomic, readonly, copy) NSString * _Nullable token;
-@property (nonatomic, readonly, copy) NSString * _Nonnull issuer;
-@property (nonatomic, readonly, copy) NSString * _Nonnull launch;
-- (nonnull instancetype)initWithToken:(NSString * _Nullable)token issuer:(NSString * _Nonnull)issuer launch:(NSString * _Nonnull)launch OBJC_DESIGNATED_INITIALIZER;
+- (void)logoutWith:(enum SignOutReason)logoutType;
+@end
+
+@class UIViewController;
+SWIFT_CLASS("_TtC20DragonCopilotTurnkey27AppWebViewControllerWrapper")
+@interface AppWebViewControllerWrapper : NSObject
+- (UIViewController * _Nonnull)getViewController SWIFT_WARN_UNUSED_RESULT;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
 
+@protocol ConfigurationProvider;
+@protocol SessionDataProvider;
+SWIFT_CLASS("_TtC20DragonCopilotTurnkey17ApplicationConfig")
+@interface ApplicationConfig : NSObject
++ (ApplicationConfig * _Nonnull)getInstanceWithDataProvider:(id <ConfigurationProvider> _Nonnull)dataProvider delegate:(id <AppUiDelegate> _Nullable)delegate recordingDelegate:(id <AppRecordingDelegate> _Nullable)recordingDelegate dictationDelegate:(id <AppDictationDelegate> _Nullable)dictationDelegate settingsDelegate:(id <AppSettingsDelegate> _Nullable)settingsDelegate internalClientDelegate:(id <AppInternalDelegate> _Nullable)internalClientDelegate SWIFT_WARN_UNUSED_RESULT;
++ (void)clearInstance;
+- (UIViewController * _Nonnull)openSessionControllerWithSessionDataProvider:(id <SessionDataProvider> _Nonnull)sessionDataProvider SWIFT_WARN_UNUSED_RESULT;
+- (void)closeSession;
+- (void)disableLogging;
+- (void)developerModeWithIsON:(BOOL)isON;
++ (BOOL)isDeveloperModeOn SWIFT_WARN_UNUSED_RESULT;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+@class ClientAppInfo;
+@class ServerInfo;
+enum AuthType : NSInteger;
+@class UserInfo;
+/// Configuration for the Turnkey SDK
+SWIFT_CLASS("_TtC20DragonCopilotTurnkey25ApplicationConfigProvider")
+@interface ApplicationConfigProvider : NSObject
+/// Initializes a new instance of `ApplicationConfigProvider
+- (nonnull instancetype)initWithClientAppInfo:(ClientAppInfo * _Nonnull)clientAppInfo serverInfo:(ServerInfo * _Nonnull)serverInfo providerName:(NSString * _Nonnull)providerName isInternalClient:(BOOL)isInternalClient authType:(enum AuthType)authType userInfo:(UserInfo * _Nullable)userInfo partnerId:(NSString * _Nullable)partnerId customerId:(NSString * _Nullable)customerId ehrInstanceId:(NSString * _Nullable)ehrInstanceId productId:(NSString * _Nullable)productId traceId:(NSString * _Nullable)traceId OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+/// Authentication type for the SDK
+typedef SWIFT_ENUM(NSInteger, AuthType, open) {
+  AuthTypeEntraId = 0,
+  AuthTypePartnerToken = 1,
+  AuthTypeSmartOnFhir = 2,
+};
+
+SWIFT_CLASS("_TtC20DragonCopilotTurnkey13ClientAppInfo")
+@interface ClientAppInfo : NSObject
+/// Initializes a new instance of <code>ClientAppInfo</code>.
+- (nonnull instancetype)initWithAppId:(NSString * _Nullable)appId appVersion:(NSString * _Nullable)appVersion deviceId:(NSString * _Nullable)deviceId OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+/// Base class for token responses used in the Turnkey SDK.
+/// \param token The access token string.
+///
+SWIFT_CLASS("_TtC20DragonCopilotTurnkey11ClientToken")
+@interface ClientToken : NSObject
+@property (nonatomic, readonly, copy) NSString * _Nonnull token;
+- (nonnull instancetype)initWithToken:(NSString * _Nonnull)token OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+@class NSDate;
+/// Token response for Entra authentication.
+/// \param token The access token string.
+///
+/// \param expireOn The expiration date of the token.
+///
+/// \param scope Optional OAuth scopes for the token.
+///
+/// \param tenantId Optional Azure AD tenant identifier.
+///
+SWIFT_CLASS("_TtC20DragonCopilotTurnkey16ClientEntraToken")
+@interface ClientEntraToken : ClientToken
+@property (nonatomic, readonly, copy) NSDate * _Nonnull expireOn;
+@property (nonatomic, readonly, copy) NSArray<NSString *> * _Nullable scope;
+@property (nonatomic, readonly, copy) NSString * _Nullable tenantId;
+- (nonnull instancetype)initWithToken:(NSString * _Nonnull)token expireOn:(NSDate * _Nonnull)expireOn scope:(NSArray<NSString *> * _Nullable)scope tenantId:(NSString * _Nullable)tenantId OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithToken:(NSString * _Nonnull)token SWIFT_UNAVAILABLE;
+@end
+
+/// Token response for SMART on FHIR (SoF) authentication.
+/// Contains only the SMART launch parameters (issuer and launch).
+/// The OAuth token is provided separately via ClientToken.
+/// \param issuer The issuer URL for SMART on FHIR authentication.
+///
+/// \param launch The launch code for SMART on FHIR authentication.
+///
+SWIFT_CLASS("_TtC20DragonCopilotTurnkey14ClientSoFToken")
+@interface ClientSoFToken : NSObject
+@property (nonatomic, readonly, copy) NSString * _Nonnull issuer;
+@property (nonatomic, readonly, copy) NSString * _Nonnull launch;
+- (nonnull instancetype)initWithIssuer:(NSString * _Nonnull)issuer launch:(NSString * _Nonnull)launch OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+/// Container class to hold different types of authentication responses.
+SWIFT_CLASS("_TtC20DragonCopilotTurnkey19ClientTokenProvider")
+@interface ClientTokenProvider : NSObject
+@property (nonatomic, readonly, strong) ClientToken * _Nullable clientToken;
+@property (nonatomic, readonly, strong) ClientEntraToken * _Nullable clientEntraToken;
+@property (nonatomic, readonly, strong) ClientSoFToken * _Nullable clientSoFToken;
+/// Initializes the container with optional responses.
+/// For SMART on FHIR, both clientToken (OAuth token) and clientSoFToken (SMART params) should be provided.
+/// \param clientToken An instance of <code>ClientToken</code> or nil.
+///
+/// \param clientEntraToken An instance of <code>ClientEntraToken</code> or nil.
+///
+/// \param clientSoFToken An instance of <code>ClientSoFToken</code> or nil.
+///
+- (nonnull instancetype)initWithClientToken:(ClientToken * _Nullable)clientToken clientEntraToken:(ClientEntraToken * _Nullable)clientEntraToken clientSoFToken:(ClientSoFToken * _Nullable)clientSoFToken OBJC_DESIGNATED_INITIALIZER;
+/// Convenience initializer for <code>ClientToken</code>.
+/// \param clientToken An instance of <code>ClientToken</code>.
+///
+- (nonnull instancetype)initWithClientToken:(ClientToken * _Nonnull)clientToken;
+/// Convenience initializer for <code>ClientEntraToken</code>.
+/// \param clientEntraToken An instance of <code>ClientEntraToken</code>.
+///
+- (nonnull instancetype)initWithClientEntraToken:(ClientEntraToken * _Nonnull)clientEntraToken;
+/// Convenience initializer for <code>ClientSoFToken</code>.
+/// \param clientSoFToken An instance of <code>ClientSoFToken</code>.
+///
+- (nonnull instancetype)initWithClientSoFToken:(ClientSoFToken * _Nonnull)clientSoFToken;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+/// Protocol for providing configuration data to the TurnKey framework
+SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey21ConfigurationProvider_")
+@protocol ConfigurationProvider
+/// Returns the configuration for the TurnKey framework
+///
+/// returns:
+/// The configuration object
+- (ApplicationConfigProvider * _Nonnull)getConfiguration SWIFT_WARN_UNUSED_RESULT;
+/// Returns the access token provider for authentication
+///
+/// returns:
+/// The access token provider
+- (id <AppAccessTokenProvider> _Nonnull)getAccessTokenProvider SWIFT_WARN_UNUSED_RESULT;
+/// Returns the user information
+///
+/// returns:
+/// The user object
+- (UserInfo * _Nonnull)getUserInfo SWIFT_WARN_UNUSED_RESULT;
+@end
+
+/// Represents details for a patient.
+SWIFT_CLASS("_TtC20DragonCopilotTurnkey11PatientInfo")
+@interface PatientInfo : NSObject
+/// Initializes a new instance of <code>PatientInfo</code>.
+- (nonnull instancetype)initWithId:(NSString * _Nullable)id fhirId:(NSString * _Nullable)fhirId firstName:(NSString * _Nullable)firstName lastName:(NSString * _Nullable)lastName middleName:(NSString * _Nullable)middleName gender:(NSString * _Nullable)gender birthDate:(NSDate * _Nullable)birthDate medicalRecordNumber:(NSString * _Nullable)medicalRecordNumber OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+/// Represents different notifications and warnings during recording
+typedef SWIFT_ENUM(NSInteger, RecordingProgressNotification, open) {
+/// Warning that recording duration limit is approaching
+  RecordingProgressNotificationReachedWarnLimit = 0,
+/// Audio silence detected during recording
+  RecordingProgressNotificationAudioLoss = 1,
+/// External audio device detected
+  RecordingProgressNotificationExternalAudioDeviceDetected = 2,
+};
+
+/// Represents the different reasons why a recording might be stopped
+typedef SWIFT_ENUM(NSInteger, RecordingStopReason, open) {
+/// User manually stopped recording
+  RecordingStopReasonUser = 0,
+/// Recording automatically stopped due to a system error
+  RecordingStopReasonSystemError = 1,
+/// Recording automatically stopped due to audio interruption (e.g., phone call)
+  RecordingStopReasonAudioInterrupted = 2,
+/// Recording automatically stopped because maximum duration was reached
+  RecordingStopReasonReachedMaxLimit = 3,
+/// Recording automatically stopped due to incompatible audio device detected
+  RecordingStopReasonIncompatibleInputDevice = 4,
+/// Recording automatically stopped due to audio device change
+  RecordingStopReasonAudioDeviceChanged = 5,
+};
+
+/// SDK-level constants for default configuration values
+SWIFT_CLASS("_TtC20DragonCopilotTurnkey12SDKConstants")
+@interface SDKConstants : NSObject
+- (nonnull instancetype)init OBJC_DESIGNATED_INITIALIZER;
+@end
+
+SWIFT_CLASS("_TtC20DragonCopilotTurnkey10ServerInfo")
+@interface ServerInfo : NSObject
+/// Initializes a new instance of <code>ServerInfo</code>.
+- (nonnull instancetype)initWithEnvironment:(NSString * _Nullable)environment geography:(NSString * _Nullable)geography cloudInstance:(NSString * _Nullable)cloudInstance OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)init SWIFT_UNAVAILABLE;
++ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
+@end
+
+@class VisitInfo;
+/// Protocol for providing session data to the TurnKey framework
+SWIFT_PROTOCOL("_TtP20DragonCopilotTurnkey19SessionDataProvider_")
+@protocol SessionDataProvider
+/// Returns the patient information for the current session
+///
+/// returns:
+/// The patient object
+- (PatientInfo * _Nonnull)getPatientInfo SWIFT_WARN_UNUSED_RESULT;
+/// Returns the visit information for the current session
+///
+/// returns:
+/// The visit object
+- (VisitInfo * _Nonnull)getVisitInfo SWIFT_WARN_UNUSED_RESULT;
+@end
+
+/// Represents the reason for user logout from the TurnKey framework
+typedef SWIFT_ENUM(NSInteger, SignOutReason, open) {
+/// User initiated logout
+  SignOutReasonUser = 0,
+/// Logout due to inactivity timeout
+  SignOutReasonInactivity = 1,
+/// Logout due to navigation away from the app
+  SignOutReasonNavigateAway = 2,
+/// Logout due to environment change
+  SignOutReasonEnvironmentChange = 3,
+/// Logout due to authentication failure
+  SignOutReasonAuthenticationFailed = 4,
+};
+
 /// Represents details for a user or practitioner.
-SWIFT_CLASS("_TtC20DragonCopilotTurnkey5TUser")
-@interface TUser : NSObject
-/// Initializes a new instance of <code>TUser</code>.
+SWIFT_CLASS("_TtC20DragonCopilotTurnkey8UserInfo")
+@interface UserInfo : NSObject
+/// Initializes a new instance of <code>UserInfo</code>.
 - (nonnull instancetype)initWithId:(NSString * _Nullable)id fhirId:(NSString * _Nullable)fhirId firstName:(NSString * _Nullable)firstName middleName:(NSString * _Nullable)middleName lastName:(NSString * _Nullable)lastName ehrUserId:(NSString * _Nullable)ehrUserId OBJC_DESIGNATED_INITIALIZER;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
 
 /// Represents details of a visit.
-SWIFT_CLASS("_TtC20DragonCopilotTurnkey6TVisit")
-@interface TVisit : NSObject
-/// Initializes a new instance of <code>TVisit</code>.
+SWIFT_CLASS("_TtC20DragonCopilotTurnkey9VisitInfo")
+@interface VisitInfo : NSObject
+/// Initializes a new instance of <code>VisitInfo</code>.
 - (nonnull instancetype)initWithId:(NSString * _Nullable)id fhirId:(NSString * _Nullable)fhirId correlationId:(NSString * _Nullable)correlationId metadata:(NSString * _Nullable)metadata reasonForVisit:(NSString * _Nullable)reasonForVisit OBJC_DESIGNATED_INITIALIZER;
-- (nonnull instancetype)init SWIFT_UNAVAILABLE;
-+ (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
-@end
-
-SWIFT_CLASS("_TtC20DragonCopilotTurnkey16TurnkeyFramework")
-@interface TurnkeyFramework : NSObject
-+ (TurnkeyFramework * _Nonnull)initializeWithDataProvider:(id <TConfigurationProvider> _Nonnull)dataProvider delegate:(id <TDelegate> _Nullable)delegate recordingDelegate:(id <TRecordingDelegate> _Nullable)recordingDelegate dictationDelegate:(id <TDictationDelegate> _Nullable)dictationDelegate settingsDelegate:(id <TSettingsDelegate> _Nullable)settingsDelegate SWIFT_WARN_UNUSED_RESULT;
-+ (void)dispose;
-- (UIViewController * _Nonnull)openSessionControllerWithSessionDataProvider:(id <TSessionDataProvider> _Nonnull)sessionDataProvider SWIFT_WARN_UNUSED_RESULT;
-- (void)closeSession;
-- (void)disableLogging;
-- (void)developerModeWithIsON:(BOOL)isON;
-+ (BOOL)isDeveloperModeOn SWIFT_WARN_UNUSED_RESULT;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
