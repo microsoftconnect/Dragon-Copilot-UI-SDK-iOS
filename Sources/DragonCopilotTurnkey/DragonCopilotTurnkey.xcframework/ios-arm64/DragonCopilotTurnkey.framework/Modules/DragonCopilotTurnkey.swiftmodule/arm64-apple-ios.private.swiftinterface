@@ -167,22 +167,37 @@ public enum L10n {
     }
   }
 }
-@objc public class TAppMetadata : ObjectiveC.NSObject {
+@objc public enum AuthType : Swift.Int {
+  case entraId
+  case partnerToken
+  case smartOnFhir
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.Int)
+  #endif
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public class ApplicationConfigProvider : ObjectiveC.NSObject {
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc public init(clientAppInfo: DragonCopilotTurnkey.ClientAppInfo, serverInfo: DragonCopilotTurnkey.ServerInfo, providerName: Swift.String, isInternalClient: Swift.Bool = false, authType: DragonCopilotTurnkey.AuthType = .partnerToken, userInfo: DragonCopilotTurnkey.UserInfo? = nil, partnerId: Swift.String? = nil, customerId: Swift.String? = nil, ehrInstanceId: Swift.String? = nil, productId: Swift.String? = nil, traceId: Swift.String? = nil)
+  #endif
+  @objc deinit
+}
+@objc public class ClientAppInfo : ObjectiveC.NSObject {
   #if compiler(>=5.3) && $NonescapableTypes
   @objc public init(appId: Swift.String? = nil, appVersion: Swift.String? = nil, deviceId: Swift.String? = nil)
   #endif
+  @objc deinit
+}
+@objc public class PatientInfo : ObjectiveC.NSObject {
   #if compiler(>=5.3) && $NonescapableTypes
-  public init(appId: Swift.String? = nil, appVersion: Swift.String? = nil, deviceId: Swift.String? = nil, internalClient: Swift.Bool = false)
+  @objc public init(id: Swift.String? = nil, fhirId: Swift.String? = nil, firstName: Swift.String? = nil, lastName: Swift.String? = nil, middleName: Swift.String? = nil, gender: Swift.String? = nil, birthDate: Foundation.Date? = nil, medicalRecordNumber: Swift.String? = nil)
   #endif
   @objc deinit
 }
-@objc public class TConfiguration : ObjectiveC.NSObject {
-  #if compiler(>=5.3) && $NonescapableTypes
-  @objc public init(appMetadata: DragonCopilotTurnkey.TAppMetadata, serverDetails: DragonCopilotTurnkey.TServerDetails, partnerId: Swift.String? = nil, customerId: Swift.String? = nil, ehrInstanceId: Swift.String? = nil, productId: Swift.String? = nil, traceId: Swift.String? = nil)
-  #endif
-  @objc deinit
-}
-@_inheritsConvenienceInitializers @objc final public class TConstants : ObjectiveC.NSObject {
+@_inheritsConvenienceInitializers @objc final public class SDKConstants : ObjectiveC.NSObject {
   public static let defaultGeography: Swift.String
   public static let defaultCloudInstance: Swift.String
   public static let defaultEnvironment: Swift.String
@@ -191,105 +206,89 @@ public enum L10n {
   @objc override dynamic public init()
   @objc deinit
 }
-@objc public class TPatient : ObjectiveC.NSObject {
+@objc public class ServerInfo : ObjectiveC.NSObject {
   #if compiler(>=5.3) && $NonescapableTypes
-  @objc public init(id: Swift.String? = nil, fhirId: Swift.String? = nil, firstName: Swift.String? = nil, lastName: Swift.String? = nil, middleName: Swift.String? = nil, gender: Swift.String? = nil, birthDate: Foundation.Date? = nil, medicalRecordNumber: Swift.String? = nil)
+  @objc public init(environment: Swift.String? = SDKConstants.defaultEnvironment, geography: Swift.String? = nil, cloudInstance: Swift.String? = nil)
   #endif
   @objc deinit
 }
-@objc public class TServerDetails : ObjectiveC.NSObject {
-  #if compiler(>=5.3) && $NonescapableTypes
-  @objc public init(environment: Swift.String? = TConstants.defaultEnvironment, geography: Swift.String? = nil, cloudInstance: Swift.String? = nil)
-  #endif
-  @objc deinit
-}
-@objc public class TUser : ObjectiveC.NSObject {
+@objc public class UserInfo : ObjectiveC.NSObject {
   #if compiler(>=5.3) && $NonescapableTypes
   @objc public init(id: Swift.String? = nil, fhirId: Swift.String? = nil, firstName: Swift.String? = nil, middleName: Swift.String? = nil, lastName: Swift.String? = nil, ehrUserId: Swift.String? = nil)
   #endif
   @objc deinit
 }
-@objc public class TVisit : ObjectiveC.NSObject {
+@objc public class VisitInfo : ObjectiveC.NSObject {
   #if compiler(>=5.3) && $NonescapableTypes
   @objc public init(id: Swift.String? = nil, fhirId: Swift.String? = nil, correlationId: Swift.String? = nil, metadata: Swift.String? = nil, reasonForVisit: Swift.String? = nil)
   #endif
   @objc deinit
 }
-@objc public class TTokenResponse : ObjectiveC.NSObject {
+@objc public class ClientToken : ObjectiveC.NSObject {
   @objc final public let token: Swift.String
   @objc public init(token: Swift.String)
   @objc deinit
 }
-@objc public class TEntraTokenResponse : DragonCopilotTurnkey.TTokenResponse {
-  @objc final public let expiresAt: Foundation.Date
-  @objc public init(token: Swift.String, expiresAt: Foundation.Date)
+@objc public class ClientEntraToken : DragonCopilotTurnkey.ClientToken {
+  @objc final public let expireOn: Foundation.Date
+  @objc final public let scope: [Swift.String]?
+  @objc final public let tenantId: Swift.String?
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc public init(token: Swift.String, expireOn: Foundation.Date, scope: [Swift.String]? = nil, tenantId: Swift.String? = nil)
+  #endif
   @objc deinit
 }
-@objc public class TSoFTokenResponse : ObjectiveC.NSObject {
-  @objc final public let token: Swift.String?
+@objc public class ClientSoFToken : ObjectiveC.NSObject {
   @objc final public let issuer: Swift.String
   @objc final public let launch: Swift.String
-  #if compiler(>=5.3) && $NonescapableTypes
-  @objc public init(token: Swift.String?, issuer: Swift.String, launch: Swift.String)
-  #endif
+  @objc public init(issuer: Swift.String, launch: Swift.String)
   @objc deinit
 }
-@_hasMissingDesignatedInitializers @objc public class TAuthResponse : ObjectiveC.NSObject {
-  @objc final public let tokenResponse: DragonCopilotTurnkey.TTokenResponse?
-  @objc final public let entraTokenResponse: DragonCopilotTurnkey.TEntraTokenResponse?
-  @objc final public let sofTokenResponse: DragonCopilotTurnkey.TSoFTokenResponse?
-  @objc convenience public init(tokenResponse: DragonCopilotTurnkey.TTokenResponse)
-  @objc convenience public init(entraTokenResponse: DragonCopilotTurnkey.TEntraTokenResponse)
-  @objc convenience public init(sofTokenResponse: DragonCopilotTurnkey.TSoFTokenResponse)
+@objc public class ClientTokenProvider : ObjectiveC.NSObject {
+  @objc final public let clientToken: DragonCopilotTurnkey.ClientToken?
+  @objc final public let clientEntraToken: DragonCopilotTurnkey.ClientEntraToken?
+  @objc final public let clientSoFToken: DragonCopilotTurnkey.ClientSoFToken?
+  #if compiler(>=5.3) && $NonescapableTypes
+  @objc public init(clientToken: DragonCopilotTurnkey.ClientToken? = nil, clientEntraToken: DragonCopilotTurnkey.ClientEntraToken? = nil, clientSoFToken: DragonCopilotTurnkey.ClientSoFToken? = nil)
+  #endif
+  @objc convenience public init(clientToken: DragonCopilotTurnkey.ClientToken)
+  @objc convenience public init(clientEntraToken: DragonCopilotTurnkey.ClientEntraToken)
+  @objc convenience public init(clientSoFToken: DragonCopilotTurnkey.ClientSoFToken)
   @objc deinit
 }
-@objc public protocol TAccessTokenProvider {
+@objc public protocol AppAccessTokenProvider {
   #if compiler(>=5.3) && $NonescapableTypes
-  @objc func accessToken(scopes: [Swift.String]?, forceRefresh: Swift.Bool, onSuccess: @escaping (DragonCopilotTurnkey.TAuthResponse) -> Swift.Void, onFailure: @escaping (any Swift.Error) -> Swift.Void)
+  @objc func accessToken(scopes: [Swift.String]?, forceRefresh: Swift.Bool, onSuccess: @escaping (DragonCopilotTurnkey.ClientTokenProvider) -> Swift.Void, onFailure: @escaping (any Swift.Error) -> Swift.Void)
   #endif
 }
-extension DragonCopilotTurnkey.TAccessTokenProvider {
+extension DragonCopilotTurnkey.AppAccessTokenProvider {
   #if compiler(>=5.3) && $NonescapableTypes
-  public func accessTokenAsync(scopes: [Swift.String]? = nil, forceRefresh: Swift.Bool = false) async throws -> DragonCopilotTurnkey.TAuthResponse
+  public func accessTokenAsync(scopes: [Swift.String]? = nil, forceRefresh: Swift.Bool = false) async throws -> DragonCopilotTurnkey.ClientTokenProvider
   #endif
 }
-@objc public protocol TConfigurationProvider {
-  @objc func getTConfiguration() -> DragonCopilotTurnkey.TConfiguration
-  @objc func getTAccessTokenProvider() -> any DragonCopilotTurnkey.TAccessTokenProvider
-  @objc func getTUser() -> DragonCopilotTurnkey.TUser
-}
-@objc public protocol TDelegate {
-  @objc optional func isTurnKeyWebViewLoaded(_ isLoadingDone: Swift.Bool)
-  @objc optional func logout(with logoutType: DragonCopilotTurnkey.LogoutReason)
-}
-@objc public enum LogoutReason : Swift.Int {
-  case user
-  case inactivity
-  #if compiler(>=5.3) && $NonescapableTypes
-  public init?(rawValue: Swift.Int)
-  #endif
-  public typealias RawValue = Swift.Int
-  public var rawValue: Swift.Int {
-    get
-  }
-}
-@objc public protocol TDictationDelegate {
+@objc public protocol AppDictationDelegate {
   @objc optional func dictationStarted()
   @objc optional func dictationStopped()
 }
-@objc public protocol TRecordingDelegate {
+@objc public protocol AppInternalDelegate {
+  @objc optional func telemetryEvent(eventName: Swift.String, eventData: [Swift.String : Any])
+  @objc optional func diagnosticEvent(diagnosticType: Swift.String, diagnosticData: [Swift.String : Any])
+  @objc optional func internalStateChanged(stateChange: Swift.String, newState: Swift.String)
+}
+@objc public protocol AppRecordingDelegate {
   @objc optional func recordingStarted()
   @objc optional func recordingFailed()
   @objc optional func recordingStopped()
-  @objc optional func recordingInterrupted(reason: DragonCopilotTurnkey.RecordingInterruptionReason)
-  @objc optional func recordingNotification(notification: DragonCopilotTurnkey.RecordingNotification)
+  @objc optional func recordingInterrupted(reason: DragonCopilotTurnkey.RecordingStopReason)
+  @objc optional func recordingNotification(notification: DragonCopilotTurnkey.RecordingProgressNotification)
 }
-@objc public enum RecordingInterruptionReason : Swift.Int {
+@objc public enum RecordingStopReason : Swift.Int {
+  case user
   case systemError
-  case audioInterruption
-  case reachedMaxDuration
+  case audioInterrupted
+  case reachedMaxLimit
   case incompatibleInputDevice
-  case audioRouteChanged
+  case audioDeviceChanged
   #if compiler(>=5.3) && $NonescapableTypes
   public init?(rawValue: Swift.Int)
   #endif
@@ -298,10 +297,10 @@ extension DragonCopilotTurnkey.TAccessTokenProvider {
     get
   }
 }
-@objc public enum RecordingNotification : Swift.Int {
-  case reachedWarnDuration
+@objc public enum RecordingProgressNotification : Swift.Int {
+  case reachedWarnLimit
   case audioLoss
-  case externalMicDetected
+  case externalAudioDeviceDetected
   #if compiler(>=5.3) && $NonescapableTypes
   public init?(rawValue: Swift.Int)
   #endif
@@ -310,14 +309,37 @@ extension DragonCopilotTurnkey.TAccessTokenProvider {
     get
   }
 }
-@objc public protocol TSessionDataProvider {
-  @objc func getTPatient() -> DragonCopilotTurnkey.TPatient
-  @objc func getTVisit() -> DragonCopilotTurnkey.TVisit
-}
-@objc public protocol TSettingsDelegate {
+@objc public protocol AppSettingsDelegate {
   @objc optional func isIdleTimerDisabled(isOn screenOn: Swift.Bool)
   @objc optional func appearanceThemeChanged(to uiTheme: Swift.String)
-  @objc optional func changeApplicationLanguage(to languageCode: Swift.String)
+  @objc optional func applicationLanguageChanged(to languageCode: Swift.String)
+}
+@objc public protocol AppUiDelegate {
+  @objc optional func webViewLoaded(_ isLoadingDone: Swift.Bool)
+  @objc optional func logout(with logoutType: DragonCopilotTurnkey.SignOutReason)
+}
+@objc public enum SignOutReason : Swift.Int {
+  case user
+  case inactivity
+  case navigateAway
+  case environmentChange
+  case authenticationFailed
+  #if compiler(>=5.3) && $NonescapableTypes
+  public init?(rawValue: Swift.Int)
+  #endif
+  public typealias RawValue = Swift.Int
+  public var rawValue: Swift.Int {
+    get
+  }
+}
+@objc public protocol ConfigurationProvider {
+  @objc func getConfiguration() -> DragonCopilotTurnkey.ApplicationConfigProvider
+  @objc func getAccessTokenProvider() -> any DragonCopilotTurnkey.AppAccessTokenProvider
+  @objc func getUserInfo() -> DragonCopilotTurnkey.UserInfo
+}
+@objc public protocol SessionDataProvider {
+  @objc func getPatientInfo() -> DragonCopilotTurnkey.PatientInfo
+  @objc func getVisitInfo() -> DragonCopilotTurnkey.VisitInfo
 }
 public enum TurnkeyError : Foundation.LocalizedError {
   case securityViolation(Swift.String)
@@ -329,31 +351,34 @@ public enum TurnkeyError : Foundation.LocalizedError {
   }
   #endif
 }
-extension DragonCopilotTurnkey.TurnkeyFramework {
+extension DragonCopilotTurnkey.ApplicationConfig {
   public static var version: Swift.String {
     get
   }
 }
-@_hasMissingDesignatedInitializers @objc public class TurnkeyFramework : ObjectiveC.NSObject {
+@_hasMissingDesignatedInitializers @objc public class ApplicationConfig : ObjectiveC.NSObject {
   #if compiler(>=5.3) && $NonescapableTypes
-  @objc public static func initialize(dataProvider: any DragonCopilotTurnkey.TConfigurationProvider, delegate: (any DragonCopilotTurnkey.TDelegate)? = nil, recordingDelegate: (any DragonCopilotTurnkey.TRecordingDelegate)? = nil, dictationDelegate: (any DragonCopilotTurnkey.TDictationDelegate)? = nil, settingsDelegate: (any DragonCopilotTurnkey.TSettingsDelegate)? = nil) -> DragonCopilotTurnkey.TurnkeyFramework
+  @objc public static func getInstance(dataProvider: any DragonCopilotTurnkey.ConfigurationProvider, delegate: (any DragonCopilotTurnkey.AppUiDelegate)? = nil, recordingDelegate: (any DragonCopilotTurnkey.AppRecordingDelegate)? = nil, dictationDelegate: (any DragonCopilotTurnkey.AppDictationDelegate)? = nil, settingsDelegate: (any DragonCopilotTurnkey.AppSettingsDelegate)? = nil, internalClientDelegate: (any DragonCopilotTurnkey.AppInternalDelegate)? = nil) -> DragonCopilotTurnkey.ApplicationConfig
   #endif
-  @objc public static func dispose()
-  public func openSession(sessionDataProvider: any DragonCopilotTurnkey.TSessionDataProvider) -> some SwiftUICore.View
+  @objc public static func clearInstance()
+  public func openSession(sessionDataProvider: any DragonCopilotTurnkey.SessionDataProvider) -> some SwiftUICore.View
   
-  @objc public func openSessionController(sessionDataProvider: any DragonCopilotTurnkey.TSessionDataProvider) -> UIKit.UIViewController
+  @objc public func openSessionController(sessionDataProvider: any DragonCopilotTurnkey.SessionDataProvider) -> UIKit.UIViewController
   @objc public func closeSession()
   @objc public func disableLogging()
   @objc public func developerMode(isON: Swift.Bool = false)
   @objc public static func isDeveloperModeOn() -> Swift.Bool
   @objc deinit
 }
-extension DragonCopilotTurnkey.LogoutReason : Swift.Equatable {}
-extension DragonCopilotTurnkey.LogoutReason : Swift.Hashable {}
-extension DragonCopilotTurnkey.LogoutReason : Swift.RawRepresentable {}
-extension DragonCopilotTurnkey.RecordingInterruptionReason : Swift.Equatable {}
-extension DragonCopilotTurnkey.RecordingInterruptionReason : Swift.Hashable {}
-extension DragonCopilotTurnkey.RecordingInterruptionReason : Swift.RawRepresentable {}
-extension DragonCopilotTurnkey.RecordingNotification : Swift.Equatable {}
-extension DragonCopilotTurnkey.RecordingNotification : Swift.Hashable {}
-extension DragonCopilotTurnkey.RecordingNotification : Swift.RawRepresentable {}
+extension DragonCopilotTurnkey.AuthType : Swift.Equatable {}
+extension DragonCopilotTurnkey.AuthType : Swift.Hashable {}
+extension DragonCopilotTurnkey.AuthType : Swift.RawRepresentable {}
+extension DragonCopilotTurnkey.RecordingStopReason : Swift.Equatable {}
+extension DragonCopilotTurnkey.RecordingStopReason : Swift.Hashable {}
+extension DragonCopilotTurnkey.RecordingStopReason : Swift.RawRepresentable {}
+extension DragonCopilotTurnkey.RecordingProgressNotification : Swift.Equatable {}
+extension DragonCopilotTurnkey.RecordingProgressNotification : Swift.Hashable {}
+extension DragonCopilotTurnkey.RecordingProgressNotification : Swift.RawRepresentable {}
+extension DragonCopilotTurnkey.SignOutReason : Swift.Equatable {}
+extension DragonCopilotTurnkey.SignOutReason : Swift.Hashable {}
+extension DragonCopilotTurnkey.SignOutReason : Swift.RawRepresentable {}

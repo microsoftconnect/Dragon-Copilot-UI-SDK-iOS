@@ -1,6 +1,5 @@
 // swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
-// DragonMedicalSpeechKit Version is 7.0.16
 import PackageDescription
 
 let package = Package(
