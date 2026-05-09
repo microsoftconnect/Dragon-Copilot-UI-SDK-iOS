@@ -220,7 +220,7 @@ public enum L10n {
 }
 @objc public class VisitInfo : ObjectiveC.NSObject {
   #if compiler(>=5.3) && $NonescapableTypes
-  @objc public init(id: Swift.String? = nil, fhirId: Swift.String? = nil, correlationId: Swift.String? = nil, metadata: Swift.String? = nil, reasonForVisit: Swift.String? = nil)
+  @objc public init(id: Swift.String? = nil, fhirId: Swift.String? = nil, correlationId: Swift.String? = nil, metadata: Swift.String? = nil, reasonForVisit: Swift.String? = nil, outputFormIds: [Swift.String]? = nil)
   #endif
   @objc deinit
 }
