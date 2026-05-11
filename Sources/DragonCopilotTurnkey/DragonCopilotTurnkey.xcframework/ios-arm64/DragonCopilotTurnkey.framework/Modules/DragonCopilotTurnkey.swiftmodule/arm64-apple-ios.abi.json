@@ -1239,6 +1239,16 @@
       },
       {
         "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "DragonCopilotTurnkey",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
+        "kind": "Import",
         "name": "AVFoundation",
         "printedName": "AVFoundation",
         "declKind": "Import",
@@ -6212,7 +6222,7 @@
           {
             "kind": "Constructor",
             "name": "init",
-            "printedName": "init(id:fhirId:correlationId:metadata:reasonForVisit:)",
+            "printedName": "init(id:fhirId:correlationId:metadata:reasonForVisit:outputFormIds:)",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -6294,13 +6304,36 @@
                 ],
                 "hasDefaultArg": true,
                 "usr": "s:Sq"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Optional",
+                "printedName": "[Swift.String]?",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Array",
+                    "printedName": "[Swift.String]",
+                    "children": [
+                      {
+                        "kind": "TypeNominal",
+                        "name": "String",
+                        "printedName": "Swift.String",
+                        "usr": "s:SS"
+                      }
+                    ],
+                    "usr": "s:Sa"
+                  }
+                ],
+                "hasDefaultArg": true,
+                "usr": "s:Sq"
               }
             ],
             "declKind": "Constructor",
-            "usr": "c:@M@DragonCopilotTurnkey@objc(cs)VisitInfo(im)initWithId:fhirId:correlationId:metadata:reasonForVisit:",
-            "mangledName": "$s20DragonCopilotTurnkey9VisitInfoC2id6fhirId011correlationH08metadata09reasonForD0ACSSSg_A4Itcfc",
+            "usr": "c:@M@DragonCopilotTurnkey@objc(cs)VisitInfo(im)initWithId:fhirId:correlationId:metadata:reasonForVisit:outputFormIds:",
+            "mangledName": "$s20DragonCopilotTurnkey9VisitInfoC2id6fhirId011correlationH08metadata09reasonForD013outputFormIdsACSSSg_A4JSaySSGSgtcfc",
             "moduleName": "DragonCopilotTurnkey",
-            "objc_name": "initWithId:fhirId:correlationId:metadata:reasonForVisit:",
+            "objc_name": "initWithId:fhirId:correlationId:metadata:reasonForVisit:outputFormIds:",
             "declAttributes": [
               "AccessControl",
               "ObjC",
@@ -11772,16 +11805,16 @@
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/Logging\/LogSanitizer.swift",
       "kind": "StringLiteral",
-      "offset": 361,
-      "length": 12,
-      "value": "\"[REDACTED]\""
+      "offset": 439,
+      "length": 80,
+      "value": "\"\\b(eyJ[A-Za-z0-9_\\-\\.=+\\\/]+\\.[A-Za-z0-9_\\-\\.=+\\\/]+\\.[A-Za-z0-9_\\-\\.=+\\\/]+)\\b\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/Logging\/LogSanitizer.swift",
       "kind": "StringLiteral",
-      "offset": 392,
-      "length": 82,
-      "value": "\"\\b(?:eyJ[A-Za-z0-9_\\-\\.=+\\\/]+\\.[A-Za-z0-9_\\-\\.=+\\\/]+\\.[A-Za-z0-9_\\-\\.=+\\\/]+)\\b\""
+      "offset": 796,
+      "length": 142,
+      "value": "\"firstName|lastName|middleName|gender|dateOfBirth|birthDate|fhirId|patientId|mrn|medicalRecordNumber|physicianName|physicianId|reasonForVisit\""
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/Logging\/OSLogHandler.swift",
@@ -12941,14 +12974,14 @@
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/NewSession\/ViewModel\/RecorderViewModel.swift",
       "kind": "Array",
-      "offset": 1974,
+      "offset": 2022,
       "length": 2,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/NewSession\/ViewModel\/RecorderViewModel.swift",
       "kind": "BooleanLiteral",
-      "offset": 2063,
+      "offset": 2111,
       "length": 5,
       "value": "false"
     },
@@ -13011,28 +13044,28 @@
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/SessionStub\/Protocols\/ApplicationState.swift",
       "kind": "Dictionary",
-      "offset": 3015,
+      "offset": 3019,
       "length": 3,
       "value": "[]"
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/SessionStub\/Protocols\/ApplicationState.swift",
       "kind": "BooleanLiteral",
-      "offset": 3065,
+      "offset": 3069,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/SessionStub\/Protocols\/ApplicationState.swift",
       "kind": "BooleanLiteral",
-      "offset": 5422,
+      "offset": 5426,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/SessionStub\/Protocols\/ApplicationState.swift",
       "kind": "BooleanLiteral",
-      "offset": 8100,
+      "offset": 8104,
       "length": 5,
       "value": "false"
     },
