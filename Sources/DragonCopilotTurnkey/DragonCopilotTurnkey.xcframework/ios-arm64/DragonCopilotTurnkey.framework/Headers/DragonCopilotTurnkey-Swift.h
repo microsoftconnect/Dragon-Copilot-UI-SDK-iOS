@@ -651,7 +651,7 @@ SWIFT_CLASS("_TtC20DragonCopilotTurnkey8UserInfo")
 SWIFT_CLASS("_TtC20DragonCopilotTurnkey9VisitInfo")
 @interface VisitInfo : NSObject
 /// Initializes a new instance of <code>VisitInfo</code>.
-- (nonnull instancetype)initWithId:(NSString * _Nullable)id fhirId:(NSString * _Nullable)fhirId correlationId:(NSString * _Nullable)correlationId metadata:(NSString * _Nullable)metadata reasonForVisit:(NSString * _Nullable)reasonForVisit OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithId:(NSString * _Nullable)id fhirId:(NSString * _Nullable)fhirId correlationId:(NSString * _Nullable)correlationId metadata:(NSString * _Nullable)metadata reasonForVisit:(NSString * _Nullable)reasonForVisit outputFormIds:(NSArray<NSString *> * _Nullable)outputFormIds OBJC_DESIGNATED_INITIALIZER;
 - (nonnull instancetype)init SWIFT_UNAVAILABLE;
 + (nonnull instancetype)new SWIFT_UNAVAILABLE_MSG("-init is unavailable");
 @end
