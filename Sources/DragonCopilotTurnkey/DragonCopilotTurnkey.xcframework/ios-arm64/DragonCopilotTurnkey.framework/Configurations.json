@@ -47,7 +47,7 @@
         "LoggingServiceScope" : "7c39e0e4-8c95-4069-883d-89e24351d6ba/.default",
         "DefaultAppScope" : "7c39e0e4-8c95-4069-883d-89e24351d6ba/.default",
         "UseLocalConfiguredUrls" :"false",
-        "EhrIntegrationServiceUrl": "https://ehr-internal.qa.ppe-copilot.dragon.com",
+        "EhrIntegrationServiceUrl": "https://dragon-ehr.dev.ppe-copilot.us.dragon.com/",
         "ConfigServiceUrl": "https://apim.qa.ppe-copilot.us.dragon.com/configservice/api/v1",
         "WebviewUrl": "https://www.qa.ppe-copilot.us.dragon.com/unibox/drc/",
         "LoggingServiceUrl" : "https://apim.qa.ppe-copilot.dragon.com/loggingservice/api/v1",

@@ -47,6 +47,7 @@ public protocol JailbreakSecurityDelegate : AnyObject {
   public var isDeviceJailbroken: Swift.Bool {
     get
   }
+  public var simulateJailbreak: Swift.Bool
   @discardableResult
   public func performSecurityCheck() -> Swift.Bool
   @objc deinit
