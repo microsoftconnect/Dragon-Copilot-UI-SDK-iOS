@@ -1749,6 +1749,93 @@
             ]
           },
           {
+            "kind": "Var",
+            "name": "simulateJailbreak",
+            "printedName": "simulateJailbreak",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Var",
+            "usr": "s:20DragonCopilotTurnkey24JailbreakSecurityManagerC08simulateD0Sbvp",
+            "mangledName": "$s20DragonCopilotTurnkey24JailbreakSecurityManagerC08simulateD0Sbvp",
+            "moduleName": "DragonCopilotTurnkey",
+            "declAttributes": [
+              "HasInitialValue",
+              "HasStorage",
+              "AccessControl",
+              "RawDocComment"
+            ],
+            "hasStorage": true,
+            "accessors": [
+              {
+                "kind": "Accessor",
+                "name": "Get",
+                "printedName": "Get()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:20DragonCopilotTurnkey24JailbreakSecurityManagerC08simulateD0Sbvg",
+                "mangledName": "$s20DragonCopilotTurnkey24JailbreakSecurityManagerC08simulateD0Sbvg",
+                "moduleName": "DragonCopilotTurnkey",
+                "implicit": true,
+                "accessorKind": "get"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Set",
+                "printedName": "Set()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  },
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Bool",
+                    "printedName": "Swift.Bool",
+                    "usr": "s:Sb"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:20DragonCopilotTurnkey24JailbreakSecurityManagerC08simulateD0Sbvs",
+                "mangledName": "$s20DragonCopilotTurnkey24JailbreakSecurityManagerC08simulateD0Sbvs",
+                "moduleName": "DragonCopilotTurnkey",
+                "implicit": true,
+                "accessorKind": "set"
+              },
+              {
+                "kind": "Accessor",
+                "name": "Modify",
+                "printedName": "Modify()",
+                "children": [
+                  {
+                    "kind": "TypeNominal",
+                    "name": "Void",
+                    "printedName": "()"
+                  }
+                ],
+                "declKind": "Accessor",
+                "usr": "s:20DragonCopilotTurnkey24JailbreakSecurityManagerC08simulateD0SbvM",
+                "mangledName": "$s20DragonCopilotTurnkey24JailbreakSecurityManagerC08simulateD0SbvM",
+                "moduleName": "DragonCopilotTurnkey",
+                "implicit": true,
+                "accessorKind": "_modify"
+              }
+            ]
+          },
+          {
             "kind": "Function",
             "name": "performSecurityCheck",
             "printedName": "performSecurityCheck()",
@@ -11756,7 +11843,7 @@
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/Authentication\/AuthTokenExchangeService.swift",
       "kind": "BooleanLiteral",
-      "offset": 3407,
+      "offset": 3441,
       "length": 5,
       "value": "false"
     },
@@ -12601,6 +12688,13 @@
       "value": "\"unregisterMetaGlasses\""
     },
     {
+      "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/MessageHandlers\/Model\/EventTypeConstants.swift",
+      "kind": "StringLiteral",
+      "offset": 4143,
+      "length": 23,
+      "value": "\"mobileWebContextReady\""
+    },
+    {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/MessageHandlers\/Model\/Notification+Extensions.swift",
       "kind": "StringLiteral",
       "offset": 299,
@@ -12909,6 +13003,13 @@
       "value": "\"environmentChanged\""
     },
     {
+      "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/MessageHandlers\/Model\/Notification+Extensions.swift",
+      "kind": "StringLiteral",
+      "offset": 4178,
+      "length": 23,
+      "value": "\"mobileWebContextReady\""
+    },
+    {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/Networking\/BackgroundTaskScheduler.swift",
       "kind": "StringLiteral",
       "offset": 905,
@@ -13030,7 +13131,7 @@
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/Security\/JailBreakDetection.swift",
       "kind": "StringLiteral",
-      "offset": 1584,
+      "offset": 1628,
       "length": 32,
       "value": "\"AdminSettings.DeviceJailbroken\""
     },
@@ -13038,6 +13139,13 @@
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/Security\/JailbreakSecurityManager.swift",
       "kind": "BooleanLiteral",
       "offset": 1096,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/Security\/JailbreakSecurityManager.swift",
+      "kind": "BooleanLiteral",
+      "offset": 1363,
       "length": 5,
       "value": "false"
     },
@@ -13226,14 +13334,14 @@
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/SpeechKit\/SpeechKitManager.swift",
       "kind": "BooleanLiteral",
-      "offset": 16088,
+      "offset": 16120,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Features\/SpeechKit\/SpeechKitManager.swift",
       "kind": "BooleanLiteral",
-      "offset": 23021,
+      "offset": 23053,
       "length": 4,
       "value": "true"
     },
@@ -14372,6 +14480,13 @@
       "value": "\"appInsights\""
     },
     {
+      "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Utilities\/Constants.swift",
+      "kind": "Array",
+      "offset": 4690,
+      "length": 62,
+      "value": "[\"53d96425-1bfd-4b01-8241-1f196cdbc818\"]"
+    },
+    {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/App\/Utilities\/DependencyContainer.swift",
       "kind": "Dictionary",
       "offset": 528,
@@ -14605,7 +14720,7 @@
     {
       "filePath": "\/Users\/runner\/work\/1\/s\/DragonCopilotTurnkey\/DragonCopilotTurnkey\/ApplicationConfig.swift",
       "kind": "BooleanLiteral",
-      "offset": 7207,
+      "offset": 7181,
       "length": 5,
       "value": "false"
     },
