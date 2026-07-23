@@ -1,0 +1,49 @@
+// swift-tools-version: 6.0
+// The swift-tools-version declares the minimum version of Swift required to build this package.
+//
+// GENERATED FILE — do not edit by hand.
+// This manifest is rendered by the release pipeline
+// (.pipelines/templates/github-release.yml) for the GitHub SPM distribution repo
+// microsoftconnect/Dragon-Copilot-UI-SDK-iOS. The binary targets are downloaded
+// from the matching GitHub release assets; no xcframeworks are committed.
+//
+// Token substitutions performed at release time:
+//   __RELEASE_BASE__     -> https://github.com/<repo>/releases/download/v<version>
+//   __CHECKSUM_DRAGON__  -> SHA-256 of DragonCopilotTurnkey.xcframework.zip
+//   __CHECKSUM_SPEECH__  -> SHA-256 of MicrosoftCognitiveServicesSpeech.xcframework.zip
+import PackageDescription
+
+let package = Package(
+    name: "DragonCopilotTurnkey",
+    platforms: [
+        .iOS(.v16)
+    ],
+    products: [
+        .library(
+            name: "DragonCopilotTurnkey",
+            targets: ["DragonCopilotTurnkey", "DragonCopilotTurnkeyDependencies"]
+        )
+    ],
+    dependencies: [
+        .package(url: "https://github.com/microsoftconnect/DAXKit-SDK-iOS", .upToNextMajor(from: "1.6.0"))
+    ],
+    targets: [
+        .binaryTarget(
+            name: "DragonCopilotTurnkey",
+            url: "__RELEASE_BASE__/DragonCopilotTurnkey.xcframework.zip",
+            checksum: "__CHECKSUM_DRAGON__"
+        ),
+        .binaryTarget(
+            name: "MicrosoftCognitiveServicesSpeech",
+            url: "__RELEASE_BASE__/MicrosoftCognitiveServicesSpeech.xcframework.zip",
+            checksum: "__CHECKSUM_SPEECH__"
+        ),
+        .target(
+            name: "DragonCopilotTurnkeyDependencies",
+            dependencies: [
+                "MicrosoftCognitiveServicesSpeech", .product(name: "DAXKit", package: "DAXKit-SDK-iOS")
+            ],
+            path: "Sources/DragonCopilotTurnkeyDependencies"
+        )
+    ]
+)

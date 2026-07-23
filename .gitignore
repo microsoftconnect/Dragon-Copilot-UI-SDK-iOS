@@ -1,0 +1,14 @@
+# macOS / Xcode build artifacts
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+.DS_Store
+**/.DS_Store
+
+# Swift Package Manager
+.build/
+.swiftpm/xcode/xcuserdata/
+*.resolved
+
+# Downloaded release assets (used transiently by CI workflow)
+assets/
