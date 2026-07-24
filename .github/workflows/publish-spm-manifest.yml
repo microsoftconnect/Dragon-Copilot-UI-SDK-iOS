@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: spm-manifest-${{ github.event.release.tag_name }}
@@ -70,25 +71,43 @@ jobs:
       - name: Commit manifest and finalize release tag
         env:
           TAG: ${{ github.event.release.tag_name }}
+          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
 
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+          # Remember where HEAD is before any changes (the release commit).
+          MANIFEST_SHA="$(git rev-parse HEAD)"
+
           git add Package.swift
           if git diff --cached --quiet; then
             echo "Package.swift unchanged — no new commit needed."
           else
             git commit -m "Release $TAG — update SPM manifest (binaryTarget url:checksum)"
-            git push origin HEAD:main
-            echo "Package.swift committed."
+
+            # The repo's branch ruleset requires all changes to main to go through
+            # a pull request. Push to a short-lived branch and merge via PR to
+            # satisfy that requirement.
+            BRANCH="spm-manifest-update/$TAG"
+            git checkout -b "$BRANCH"
+            git push origin "$BRANCH"
+            gh pr create \
+              --title "Release $TAG — update SPM manifest (binaryTarget url:checksum)" \
+              --body "Automated: update Package.swift with binary target URLs and checksums for release $TAG." \
+              --base main \
+              --head "$BRANCH"
+            gh pr merge "$BRANCH" --squash --delete-branch
+            git fetch origin main
+            MANIFEST_SHA="$(git rev-parse FETCH_HEAD)"
+            echo "Package.swift committed and merged to main."
           fi
 
           # Force-update the SAME tag name to point at the manifest commit.
-          # No new tag is created — the published release tag (e.g. v4.0.0)
+          # No new tag is created — the published release tag (e.g. v5.0.0)
           # is simply moved to include the generated Package.swift.
           echo "Finalizing tag $TAG — pointing to manifest commit (same tag name preserved)."
-          git tag -f "$TAG"
+          git tag -f "$TAG" "$MANIFEST_SHA"
           git push -f origin "refs/tags/$TAG"
           echo "Tag finalized: $TAG"
