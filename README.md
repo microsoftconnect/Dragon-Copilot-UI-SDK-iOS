@@ -25,3 +25,8 @@ https://github.com/microsoftconnect/Dragon-Copilot-UI-SDK-iOS
 
 Select the desired version (e.g. `v4.0.0`) and choose the **DragonCopilotTurnkey** library product.
 
+## Release manifest automation
+
+When a GitHub Release is published, the repository workflow regenerates `Package.swift` from the
+published release assets, pushes the manifest update to `release/<version>` (where `<version>` is
+the tag without its leading `v`), and opens or updates a pull request to `main` for review.

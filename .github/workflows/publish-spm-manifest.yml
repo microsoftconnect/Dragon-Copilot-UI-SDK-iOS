@@ -6,6 +6,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: spm-manifest-${{ github.event.release.tag_name }}
@@ -14,81 +15,144 @@ concurrency:
 jobs:
   update-manifest:
     runs-on: ubuntu-latest
-    if: startsWith(github.event.release.tag_name, 'v')
 
     steps:
-      - name: Checkout release tag
+      - name: Checkout main
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.release.tag_name }}
+          ref: main
           fetch-depth: 0
 
-      - name: Download release assets and render Package.swift
+      - id: render
+        name: Download release assets and render Package.swift
         env:
           TAG: ${{ github.event.release.tag_name }}
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
 
+          if [[ "$TAG" != v* ]] || [[ "$TAG" == "v" ]]; then
+            echo "::error::Release tag must start with 'v' and include a version suffix. Received: $TAG"
+            exit 1
+          fi
+
+          VERSION="${TAG#v}"
+          BRANCH="release/$VERSION"
+          BASE="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG"
+          ASSET_DIR="$(mktemp -d)"
+          RENDERED_PACKAGE="$RUNNER_TEMP/Package.swift"
+          ASSETS_JSON="$RUNNER_TEMP/release-assets.json"
+
           echo "Processing release tag: $TAG"
+          echo "Release branch: $BRANCH"
 
-          mkdir -p assets
-          gh release download "$TAG" \
+          gh release view "$TAG" \
             --repo "$GITHUB_REPOSITORY" \
-            --pattern '*.xcframework.zip' \
-            --dir assets
+            --json assets > "$ASSETS_JSON"
 
-          DRAGON_ZIP="assets/DragonCopilotTurnkey.xcframework.zip"
-          SPEECH_ZIP="assets/MicrosoftCognitiveServicesSpeech.xcframework.zip"
-
-          for f in "$DRAGON_ZIP" "$SPEECH_ZIP"; do
-            if [ ! -f "$f" ]; then
-              echo "ERROR: expected asset missing: $f"
-              echo "Assets found in release $TAG:"
-              ls -la assets/
+          for asset in \
+            DragonCopilotTurnkey.xcframework.zip \
+            MicrosoftCognitiveServicesSpeech.xcframework.zip
+          do
+            if ! jq -e --arg asset "$asset" '.assets[] | select(.name == $asset)' "$ASSETS_JSON" > /dev/null; then
+              echo "::error::Required release asset is missing: $asset"
+              echo "Available assets:"
+              jq -r '.assets[].name' "$ASSETS_JSON"
               exit 1
             fi
           done
 
-          DRAGON_SUM="$(sha256sum "$DRAGON_ZIP" | awk '{print $1}')"
-          SPEECH_SUM="$(sha256sum "$SPEECH_ZIP" | awk '{print $1}')"
-          BASE="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG"
+          gh release download "$TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern 'DragonCopilotTurnkey.xcframework.zip' \
+            --pattern 'MicrosoftCognitiveServicesSpeech.xcframework.zip' \
+            --dir "$ASSET_DIR"
 
-          echo "DragonCopilotTurnkey checksum:          $DRAGON_SUM"
+          DRAGON_ZIP="$ASSET_DIR/DragonCopilotTurnkey.xcframework.zip"
+          SPEECH_ZIP="$ASSET_DIR/MicrosoftCognitiveServicesSpeech.xcframework.zip"
+          DRAGON_SUM="$(swift package compute-checksum "$DRAGON_ZIP")"
+          SPEECH_SUM="$(swift package compute-checksum "$SPEECH_ZIP")"
+
+          echo "DragonCopilotTurnkey checksum: $DRAGON_SUM"
           echo "MicrosoftCognitiveServicesSpeech checksum: $SPEECH_SUM"
 
           sed -e "s|__RELEASE_BASE__|$BASE|g" \
               -e "s|__CHECKSUM_DRAGON__|$DRAGON_SUM|g" \
               -e "s|__CHECKSUM_SPEECH__|$SPEECH_SUM|g" \
-              .github/templates/Package.swift.tmpl > Package.swift
+              .github/templates/Package.swift.tmpl > "$RENDERED_PACKAGE"
 
-          rm -rf assets
+          {
+            echo "version=$VERSION"
+            echo "branch=$BRANCH"
+            echo "rendered_package=$RENDERED_PACKAGE"
+          } >> "$GITHUB_OUTPUT"
 
-          echo "--- Rendered Package.swift ---"
-          cat Package.swift
-
-      - name: Commit manifest and finalize release tag
+      - name: Commit manifest changes to release branch
         env:
           TAG: ${{ github.event.release.tag_name }}
+          VERSION: ${{ steps.render.outputs.version }}
+          BRANCH: ${{ steps.render.outputs.branch }}
+          RENDERED_PACKAGE: ${{ steps.render.outputs.rendered_package }}
         run: |
           set -euo pipefail
 
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
+          git fetch origin main
+          if git ls-remote --exit-code --heads origin "$BRANCH" > /dev/null; then
+            git fetch origin "refs/heads/$BRANCH:refs/remotes/origin/$BRANCH"
+            git checkout -B "$BRANCH" "refs/remotes/origin/$BRANCH"
+          else
+            git checkout -b "$BRANCH" origin/main
+          fi
+
+          cp "$RENDERED_PACKAGE" Package.swift
           git add Package.swift
+
           if git diff --cached --quiet; then
             echo "Package.swift unchanged — no new commit needed."
           else
-            git commit -m "Release $TAG — update SPM manifest (binaryTarget url:checksum)"
-            git push origin HEAD:main
-            echo "Package.swift committed."
+            git commit -m "Release $TAG - update SPM manifest"
           fi
 
-          # Force-update the SAME tag name to point at the manifest commit.
-          # No new tag is created — the published release tag (e.g. v4.0.0)
-          # is simply moved to include the generated Package.swift.
-          echo "Finalizing tag $TAG — pointing to manifest commit (same tag name preserved)."
-          git tag -f "$TAG"
-          git push -f origin "refs/tags/$TAG"
-          echo "Tag finalized: $TAG"
+          git push --set-upstream origin "$BRANCH"
+
+      - name: Open or update pull request to main
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+          VERSION: ${{ steps.render.outputs.version }}
+          BRANCH: ${{ steps.render.outputs.branch }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          PR_TITLE="Release $TAG - update Swift package manifest"
+          PR_BODY="$(printf '%s\n' \
+            '## Summary' \
+            "- update \`Package.swift\` for release \`$TAG\`" \
+            '- source binaries from:' \
+            "  - \`https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/DragonCopilotTurnkey.xcframework.zip\`" \
+            "  - \`https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/MicrosoftCognitiveServicesSpeech.xcframework.zip\`" \
+            "- use release branch \`$BRANCH\`, derived by removing the leading \`v\` from \`$TAG\`")"
+
+          PR_NUMBER="$(gh pr list \
+            --repo "$GITHUB_REPOSITORY" \
+            --base main \
+            --head "$BRANCH" \
+            --json number \
+            --jq '.[0].number // empty')"
+
+          if [[ -n "$PR_NUMBER" ]]; then
+            gh pr edit "$PR_NUMBER" \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "$PR_TITLE" \
+              --body "$PR_BODY"
+          else
+            gh pr create \
+              --repo "$GITHUB_REPOSITORY" \
+              --base main \
+              --head "$BRANCH" \
+              --title "$PR_TITLE" \
+              --body "$PR_BODY"
+          fi
