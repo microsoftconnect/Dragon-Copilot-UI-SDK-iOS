@@ -14,3 +14,14 @@ This enables your users to:
 - Ask patient-related questions and receive answers from the AI engine.
 
 The SDK is distributed via the Swift Package Manager, making it easy to embed and achieve the desired functionality in your iOS apps.
+
+## Swift Package Manager Integration
+
+Add the package in Xcode via **File → Add Package Dependencies** and enter:
+
+```
+https://github.com/microsoftconnect/Dragon-Copilot-UI-SDK-iOS
+```
+
+Select the desired version (e.g. `v4.0.0`) and choose the **DragonCopilotTurnkey** library product.
+

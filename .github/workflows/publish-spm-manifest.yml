@@ -1,0 +1,93 @@
+name: Publish SPM Manifest
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: spm-manifest-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
+
+jobs:
+  update-manifest:
+    runs-on: ubuntu-latest
+    if: startsWith(github.event.release.tag_name, 'v')
+
+    steps:
+      - name: Checkout release tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+          fetch-depth: 0
+
+      - name: Download release assets and render Package.swift
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+
+          echo "Processing release tag: $TAG"
+
+          mkdir -p assets
+          gh release download "$TAG" \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern '*.xcframework.zip' \
+            --dir assets
+
+          DRAGON_ZIP="assets/DragonCopilotTurnkey.xcframework.zip"
+          SPEECH_ZIP="assets/MicrosoftCognitiveServicesSpeech.xcframework.zip"
+
+          for f in "$DRAGON_ZIP" "$SPEECH_ZIP"; do
+            if [ ! -f "$f" ]; then
+              echo "ERROR: expected asset missing: $f"
+              echo "Assets found in release $TAG:"
+              ls -la assets/
+              exit 1
+            fi
+          done
+
+          DRAGON_SUM="$(sha256sum "$DRAGON_ZIP" | awk '{print $1}')"
+          SPEECH_SUM="$(sha256sum "$SPEECH_ZIP" | awk '{print $1}')"
+          BASE="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG"
+
+          echo "DragonCopilotTurnkey checksum:          $DRAGON_SUM"
+          echo "MicrosoftCognitiveServicesSpeech checksum: $SPEECH_SUM"
+
+          sed -e "s|__RELEASE_BASE__|$BASE|g" \
+              -e "s|__CHECKSUM_DRAGON__|$DRAGON_SUM|g" \
+              -e "s|__CHECKSUM_SPEECH__|$SPEECH_SUM|g" \
+              .github/templates/Package.swift.tmpl > Package.swift
+
+          rm -rf assets
+
+          echo "--- Rendered Package.swift ---"
+          cat Package.swift
+
+      - name: Commit manifest and finalize release tag
+        env:
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git add Package.swift
+          if git diff --cached --quiet; then
+            echo "Package.swift unchanged — no new commit needed."
+          else
+            git commit -m "Release $TAG — update SPM manifest (binaryTarget url:checksum)"
+            echo "Package.swift committed."
+          fi
+
+          # Force-update the SAME tag name to point at the manifest commit.
+          # No new tag is created — the published release tag (e.g. v4.0.0)
+          # is simply moved to include the generated Package.swift.
+          echo "Finalizing tag $TAG — pointing to manifest commit (same tag name preserved)."
+          git tag -f "$TAG"
+          git push -f origin "refs/tags/$TAG"
+          echo "Tag finalized: $TAG"
