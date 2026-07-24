@@ -81,6 +81,7 @@ jobs:
             echo "Package.swift unchanged — no new commit needed."
           else
             git commit -m "Release $TAG — update SPM manifest (binaryTarget url:checksum)"
+            git push origin HEAD:main
             echo "Package.swift committed."
           fi
 
