@@ -17,9 +17,10 @@ jobs:
     if: startsWith(github.event.release.tag_name, 'v')
 
     steps:
-      - name: Checkout default branch
+      - name: Checkout release tag
         uses: actions/checkout@v4
         with:
+          ref: ${{ github.event.release.tag_name }}
           fetch-depth: 0
 
       - name: Download release assets and render Package.swift
@@ -80,8 +81,7 @@ jobs:
             echo "Package.swift unchanged — no new commit needed."
           else
             git commit -m "Release $TAG — update SPM manifest (binaryTarget url:checksum)"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
-            echo "Package.swift committed and pushed to ${GITHUB_REF_NAME}."
+            echo "Package.swift committed."
           fi
 
           # Force-update the SAME tag name to point at the manifest commit.
