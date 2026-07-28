@@ -32,6 +32,12 @@ jobs:
 
           VERSION="$TAG"
           BRANCH="release/$VERSION"
+
+          if ! git check-ref-format "refs/heads/$BRANCH"; then
+            echo "::error::Release tag '$TAG' produces an invalid git ref name '$BRANCH'. Aborting."
+            exit 1
+          fi
+
           BASE="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG"
           ASSET_DIR="$(mktemp -d)"
           RENDERED_PACKAGE="$RUNNER_TEMP/Package.swift"
