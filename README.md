@@ -23,5 +23,15 @@ Add the package in Xcode via **File → Add Package Dependencies** and enter:
 https://github.com/microsoftconnect/Dragon-Copilot-UI-SDK-iOS
 ```
 
-Select the desired version (e.g. `v4.0.0`) and choose the **DragonCopilotTurnkey** library product.
+Use semantic versions for dependency rules:
 
+- Stable releases (recommended):
+  ```swift
+  .package(url: "https://github.com/microsoftconnect/Dragon-Copilot-UI-SDK-iOS", from: "5.0.0")
+  ```
+- Prerelease/beta validation:
+  ```swift
+  .package(url: "https://github.com/microsoftconnect/Dragon-Copilot-UI-SDK-iOS", exact: "5.0.0-beta-01")
+  ```
+
+Then choose the **DragonCopilotTurnkey** library product.
