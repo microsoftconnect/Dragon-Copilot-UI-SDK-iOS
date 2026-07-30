@@ -6,7 +6,6 @@ on:
 
 permissions:
   contents: write
-  pull-requests: write
 
 concurrency:
   group: spm-manifest-${{ github.event.release.tag_name }}
@@ -31,13 +30,14 @@ jobs:
         run: |
           set -euo pipefail
 
-          if [[ "$TAG" != v* ]] || [[ "$TAG" == "v" ]]; then
-            echo "::error::Release tag must start with 'v' and include a version suffix. Received: $TAG"
+          VERSION="$TAG"
+          BRANCH="release/$VERSION"
+
+          if ! git check-ref-format "refs/heads/$BRANCH"; then
+            echo "::error::Release tag '$TAG' produces an invalid git ref name '$BRANCH'. Aborting."
             exit 1
           fi
 
-          VERSION="${TAG#v}"
-          BRANCH="release/$VERSION"
           BASE="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG"
           ASSET_DIR="$(mktemp -d)"
           RENDERED_PACKAGE="$RUNNER_TEMP/Package.swift"
@@ -118,41 +118,11 @@ jobs:
 
           git push --set-upstream origin "$BRANCH"
 
-      - name: Open or update pull request to main
+      - name: Output manual compare URL
         env:
-          TAG: ${{ github.event.release.tag_name }}
-          VERSION: ${{ steps.render.outputs.version }}
           BRANCH: ${{ steps.render.outputs.branch }}
-          GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
-
-          PR_TITLE="Release $TAG - update Swift package manifest"
-          PR_BODY="$(printf '%s\n' \
-            '## Summary' \
-            "- update \`Package.swift\` for release \`$TAG\`" \
-            '- source binaries from:' \
-            "  - \`https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/DragonCopilotTurnkey.xcframework.zip\`" \
-            "  - \`https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG/MicrosoftCognitiveServicesSpeech.xcframework.zip\`" \
-            "- use release branch \`$BRANCH\`, derived by removing the leading \`v\` from \`$TAG\`")"
-
-          PR_NUMBER="$(gh pr list \
-            --repo "$GITHUB_REPOSITORY" \
-            --base main \
-            --head "$BRANCH" \
-            --json number \
-            --jq '.[0].number // empty')"
-
-          if [[ -n "$PR_NUMBER" ]]; then
-            gh pr edit "$PR_NUMBER" \
-              --repo "$GITHUB_REPOSITORY" \
-              --title "$PR_TITLE" \
-              --body "$PR_BODY"
-          else
-            gh pr create \
-              --repo "$GITHUB_REPOSITORY" \
-              --base main \
-              --head "$BRANCH" \
-              --title "$PR_TITLE" \
-              --body "$PR_BODY"
-          fi
+          echo "Branch pushed: $BRANCH"
+          echo "Create PR manually:"
+          echo "https://github.com/$GITHUB_REPOSITORY/compare/main...$BRANCH?expand=1"
