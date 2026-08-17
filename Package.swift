@@ -25,13 +25,13 @@ let package = Package(
     targets: [
         .binaryTarget(
             name: "DragonCopilotTurnkey",
-            url: "https://github.com/microsoftconnect/Dragon-Copilot-UI-SDK-iOS/releases/download/v5.0.0-beta-01/DragonCopilotTurnkey.xcframework.zip",
-            checksum: "d04769ea44b4178eb288ab1e6553ed95625838cee278d5af4be8e587bdadeb51"
+            url: "https://github.com/microsoftconnect/Dragon-Copilot-UI-SDK-iOS/releases/download/5.0.0/DragonCopilotTurnkey.xcframework.zip",
+            checksum: "f5b547943160f7795da0a24ba923fb8f5ab154ec9fd822de31e00cefb603e5b4"
         ),
         .binaryTarget(
             name: "MicrosoftCognitiveServicesSpeech",
-            url: "https://github.com/microsoftconnect/Dragon-Copilot-UI-SDK-iOS/releases/download/v5.0.0-beta-01/MicrosoftCognitiveServicesSpeech.xcframework.zip",
-            checksum: "f4e2b5d859ae70fa4e1aa46d6f5b95273ece060f21ac3aef9ffeee34177f6011"
+            url: "https://github.com/microsoftconnect/Dragon-Copilot-UI-SDK-iOS/releases/download/5.0.0/MicrosoftCognitiveServicesSpeech.xcframework.zip",
+            checksum: "076ecdb700c490e2de3ad49bb8d26d0712b4606824d487f99f1833bdefa0a2a9"
         ),
         .target(
             name: "DragonCopilotTurnkeyDependencies",
