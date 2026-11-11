@@ -134,6 +134,11 @@ jobs:
         run: |
           set -euo pipefail
 
+          if ! git diff --quiet "$ORIGINAL_TAG" HEAD -- . ':(exclude)Package.swift'; then
+            echo "::error::Release branch differs from $TAG outside Package.swift; rebuild the repair from the release tag before retrying."
+            exit 1
+          fi
+
           git push \
             --force-with-lease="refs/tags/$TAG:$ORIGINAL_TAG" \
             origin "HEAD:refs/tags/$TAG"
