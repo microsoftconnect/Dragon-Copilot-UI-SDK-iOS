@@ -3,12 +3,18 @@ name: Publish SPM Manifest
 on:
   release:
     types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to repair
+        required: true
+        type: string
 
 permissions:
   contents: write
 
 concurrency:
-  group: spm-manifest-${{ github.event.release.tag_name }}
+  group: spm-manifest-${{ github.event.release.tag_name || inputs.tag }}
   cancel-in-progress: false
 
 jobs:
@@ -25,7 +31,7 @@ jobs:
       - id: render
         name: Download release assets and render Package.swift
         env:
-          TAG: ${{ github.event.release.tag_name }}
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
@@ -37,6 +43,8 @@ jobs:
             echo "::error::Release tag '$TAG' produces an invalid git ref name '$BRANCH'. Aborting."
             exit 1
           fi
+
+          ORIGINAL_TAG="$(git rev-parse "refs/tags/$TAG")"
 
           BASE="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG"
           ASSET_DIR="$(mktemp -d)"
@@ -85,11 +93,12 @@ jobs:
             echo "version=$VERSION"
             echo "branch=$BRANCH"
             echo "rendered_package=$RENDERED_PACKAGE"
+            echo "original_tag=$ORIGINAL_TAG"
           } >> "$GITHUB_OUTPUT"
 
       - name: Commit manifest changes to release branch
         env:
-          TAG: ${{ github.event.release.tag_name }}
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
           VERSION: ${{ steps.render.outputs.version }}
           BRANCH: ${{ steps.render.outputs.branch }}
           RENDERED_PACKAGE: ${{ steps.render.outputs.rendered_package }}
@@ -104,7 +113,7 @@ jobs:
             git fetch origin "refs/heads/$BRANCH:refs/remotes/origin/$BRANCH"
             git checkout -B "$BRANCH" "refs/remotes/origin/$BRANCH"
           else
-            git checkout -b "$BRANCH" origin/main
+            git checkout -b "$BRANCH" "refs/tags/$TAG"
           fi
 
           cp "$RENDERED_PACKAGE" Package.swift
@@ -118,11 +127,24 @@ jobs:
 
           git push --set-upstream origin "$BRANCH"
 
+      - name: Update release tag to the manifest commit
+        env:
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
+          ORIGINAL_TAG: ${{ steps.render.outputs.original_tag }}
+        run: |
+          set -euo pipefail
+
+          git push \
+            --force-with-lease="refs/tags/$TAG:$ORIGINAL_TAG" \
+            origin "HEAD:refs/tags/$TAG"
+
       - name: Output manual compare URL
         env:
           BRANCH: ${{ steps.render.outputs.branch }}
+          TAG: ${{ github.event.release.tag_name || inputs.tag }}
         run: |
           set -euo pipefail
           echo "Branch pushed: $BRANCH"
+          echo "Release tag updated: $TAG"
           echo "Create PR manually:"
           echo "https://github.com/$GITHUB_REPOSITORY/compare/main...$BRANCH?expand=1"
