@@ -35,24 +35,3 @@ Use semantic versions for dependency rules:
   ```
 
 Then choose the **DragonCopilotTurnkey** library product.
-
-## Publishing the SPM manifest
-
-Publishing a GitHub release runs `.github/workflows/publish-spm-manifest.yml`.
-The workflow downloads both release assets, computes their checksums, and commits
-the matching binary URLs and checksums to `release/<tag>`. New release branches
-start from the release tag, not from newer changes on `main`.
-
-After pushing the branch, the workflow **moves the published release tag** to the
-manifest commit so version-based SPM dependencies use the correct binaries.
-It refuses to overwrite a tag changed concurrently. Repository tag rules must
-allow the workflow token to update release tags.
-
-Merge the generated branch into `main` using the workflow's compare URL.
-To repair an existing release, run **Publish SPM Manifest** manually with its
-existing tag after both assets have been uploaded.
-
-Consumers that resolved a tag before it was repaired must clear cached package
-repository data and resolve dependencies again. Regenerate and commit each
-sample's `Package.resolved` and any dependent lockfiles; confirm the resolved
-revision matches the repaired tag rather than the previous commit.
